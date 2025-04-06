@@ -28,6 +28,8 @@ import { RelationalExprContext } from "./SimpleLangParser.js";
 import { AdditiveExprContext } from "./SimpleLangParser.js";
 import { MultiplicativeExprContext } from "./SimpleLangParser.js";
 import { UnaryExprContext } from "./SimpleLangParser.js";
+import { BorrowExpressionContext } from "./SimpleLangParser.js";
+import { DerefExpressionContext } from "./SimpleLangParser.js";
 import { PrimaryExprContext } from "./SimpleLangParser.js";
 import { LiteralContext } from "./SimpleLangParser.js";
 
@@ -190,6 +192,18 @@ export class SimpleLangVisitor<Result> extends AbstractParseTreeVisitor<Result> 
      * @return the visitor result
      */
     visitUnaryExpr?: (ctx: UnaryExprContext) => Result;
+    /**
+     * Visit a parse tree produced by `SimpleLangParser.borrowExpression`.
+     * @param ctx the parse tree
+     * @return the visitor result
+     */
+    visitBorrowExpression?: (ctx: BorrowExpressionContext) => Result;
+    /**
+     * Visit a parse tree produced by `SimpleLangParser.derefExpression`.
+     * @param ctx the parse tree
+     * @return the visitor result
+     */
+    visitDerefExpression?: (ctx: DerefExpressionContext) => Result;
     /**
      * Visit a parse tree produced by `SimpleLangParser.primaryExpr`.
      * @param ctx the parse tree

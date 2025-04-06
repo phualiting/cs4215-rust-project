@@ -28,6 +28,8 @@ import { RelationalExprContext } from "./SimpleLangParser.js";
 import { AdditiveExprContext } from "./SimpleLangParser.js";
 import { MultiplicativeExprContext } from "./SimpleLangParser.js";
 import { UnaryExprContext } from "./SimpleLangParser.js";
+import { BorrowExpressionContext } from "./SimpleLangParser.js";
+import { DerefExpressionContext } from "./SimpleLangParser.js";
 import { PrimaryExprContext } from "./SimpleLangParser.js";
 import { LiteralContext } from "./SimpleLangParser.js";
 
@@ -287,6 +289,26 @@ export class SimpleLangListener implements ParseTreeListener {
      * @param ctx the parse tree
      */
     exitUnaryExpr?: (ctx: UnaryExprContext) => void;
+    /**
+     * Enter a parse tree produced by `SimpleLangParser.borrowExpression`.
+     * @param ctx the parse tree
+     */
+    enterBorrowExpression?: (ctx: BorrowExpressionContext) => void;
+    /**
+     * Exit a parse tree produced by `SimpleLangParser.borrowExpression`.
+     * @param ctx the parse tree
+     */
+    exitBorrowExpression?: (ctx: BorrowExpressionContext) => void;
+    /**
+     * Enter a parse tree produced by `SimpleLangParser.derefExpression`.
+     * @param ctx the parse tree
+     */
+    enterDerefExpression?: (ctx: DerefExpressionContext) => void;
+    /**
+     * Exit a parse tree produced by `SimpleLangParser.derefExpression`.
+     * @param ctx the parse tree
+     */
+    exitDerefExpression?: (ctx: DerefExpressionContext) => void;
     /**
      * Enter a parse tree produced by `SimpleLangParser.primaryExpr`.
      * @param ctx the parse tree

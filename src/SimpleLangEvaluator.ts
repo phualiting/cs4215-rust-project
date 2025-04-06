@@ -7,6 +7,7 @@ import { SimpleLangVisitor } from './parser/src/SimpleLangVisitor';
 import { Instruction } from "./RustLangInstructionTypes";
 import { Heap } from "./Heap";
 import TypeCheckerVisitor from "./TypeCheckerVisitor";
+import OwnershipVisitor from "./OwnershipVisitor";
 
 class SimpleLangEvaluatorVisitor extends AbstractParseTreeVisitor<void> implements SimpleLangVisitor<void> {
     private instructions: Instruction[];
@@ -388,8 +389,12 @@ export class SimpleLangEvaluator extends BasicEvaluator {
             
             // Parse the input
             const tree = parser.prog();
-            const typeChecker = new TypeCheckerVisitor();
-            typeChecker.visit(tree);
+            // const typeChecker = new TypeCheckerVisitor();
+            // typeChecker.visit(tree);
+            this.conductor.sendOutput(`here 1`);
+            const ownershipChecker = new OwnershipVisitor();
+            ownershipChecker.visit(tree);
+            this.conductor.sendOutput(`here 2`);
             
             // Evaluate the parsed tree
             this.visitor.visit(tree);

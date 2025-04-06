@@ -79,7 +79,8 @@ assignment
     ;
 
 expression
-    : logicalOrExpr
+    : borrowExpression
+    | logicalOrExpr
     ;
 
 logicalOrExpr
@@ -108,7 +109,16 @@ multiplicativeExpr
 
 unaryExpr
     : ('-' | '!') unaryExpr
+    | borrowExpression
     | primaryExpr
+    ;
+
+borrowExpression
+    : '&' mutKeyword='mut'? target=IDENTIFIER
+    ;
+
+derefExpression
+    : '*' target=IDENTIFIER
     ;
 
 // Primary values, function calls, and parenthesis
