@@ -2,7 +2,7 @@ import { BasicEvaluator } from "conductor/dist/conductor/runner";
 import { IRunnerPlugin } from "conductor/dist/conductor/runner/types";
 import { CharStream, CommonTokenStream, AbstractParseTreeVisitor } from 'antlr4ng';
 import { SimpleLangLexer } from './parser/src/SimpleLangLexer';
-import { AdditiveExprContext, AssignmentContext, BlockContext, EqualityExprContext, ExpressionContext, IfStatementContext, LetDeclarationContext, LiteralContext, LogicalAndExprContext, LogicalOrExprContext, LoopStatementContext, MultiplicativeExprContext, PrimaryExprContext, ProgContext, RelationalExprContext, SimpleLangParser, StatementContext, StatementListContext, UnaryExprContext, WhileLoopContext } from './parser/src/SimpleLangParser';
+import { AdditiveExprContext, AssignmentContext, BlockContext, EqualityExprContext, ExpressionContext, FunctionCallContext, FunctionDeclarationContext, IfStatementContext, LetDeclarationContext, LiteralContext, LogicalAndExprContext, LogicalOrExprContext, LoopStatementContext, MultiplicativeExprContext, PrimaryExprContext, ProgContext, RelationalExprContext, ReturnStatementContext, SimpleLangParser, StatementContext, StatementListContext, UnaryExprContext, WhileLoopContext } from './parser/src/SimpleLangParser';
 import { SimpleLangVisitor } from './parser/src/SimpleLangVisitor';
 import { Instruction } from "./RustLangInstructionTypes";
 import { Heap } from "./Heap";
@@ -103,6 +103,10 @@ class SimpleLangEvaluatorVisitor extends AbstractParseTreeVisitor<void> implemen
             this.visitBreakStatement();
         } else if (ctx.continueStatement()) {
             this.visitContinueStatement();
+        } else if (ctx.functionDeclaration()) {
+            this.visitFunctionDeclaration(ctx.functionDeclaration());
+        } else if (ctx.returnStatement()) {
+            this.visitReturnStatement(ctx.returnStatement());
         }
     }
 
@@ -194,6 +198,52 @@ class SimpleLangEvaluatorVisitor extends AbstractParseTreeVisitor<void> implemen
         const loopInfo = this.loopStack[this.loopStack.length - 1];
         this.emit({ tag: 'GOTO', addr: loopInfo.continueAddr });
     }
+
+    visitFunctionDeclaration(ctx: FunctionDeclarationContext): void {
+        const name = ctx.IDENTIFIER().getText();
+        const params = ctx.parameterList()?.IDENTIFIER().map(id => id.getText()) || [];
+        const body = ctx.block();
+    
+        this.compileEnv[this.compileEnv.length - 1].push(name);
+        this.mutabilityMap.set(name, false);
+    
+        const startPC = this.wc + 2;
+        this.emit({ tag: 'LDF', arity: params.length, addr: startPC });
+    
+        const gotoIndex = this.wc++;
+        this.instructions[gotoIndex] = { tag: 'GOTO', addr: -1 };
+        this.extend_compile_env(params);
+        this.visit(body);
+        this.compileEnv.pop();
+        this.emit({ tag: 'RESET' });
+        this.instructions[gotoIndex].addr = this.wc;
+        this.emit({
+            tag: 'ASSIGN',
+            pos: this.compile_time_environment_position(this.compileEnv, name)
+        });
+    }
+    
+    
+
+    visitFunctionCall(ctx: FunctionCallContext): void {
+        const name = ctx.IDENTIFIER().getText();
+        const args = ctx.argumentList()?.expression() || [];
+        this.emit({ tag: 'LD', pos: this.compile_time_environment_position(this.compileEnv, name) });
+        for (const arg of args) {
+            this.visit(arg);
+        }
+        this.emit({ tag: 'CALL', arity: args.length });
+    }
+
+    visitReturnStatement(ctx: ReturnStatementContext): void {
+        if (ctx.expression()) {
+            this.visit(ctx.expression());
+        } else {
+            this.emit({ tag: 'LDC', val: undefined });
+        }
+        this.emit({ tag: 'RESET' });
+    }
+    
 
     visitLetDeclaration(ctx: LetDeclarationContext): void {
         const name = ctx.IDENTIFIER().getText();
@@ -289,8 +339,10 @@ class SimpleLangEvaluatorVisitor extends AbstractParseTreeVisitor<void> implemen
         } else if (ctx.IDENTIFIER()) {
             const name = ctx.IDENTIFIER().getText();
             this.emit({ tag: 'LD', pos: this.compile_time_environment_position(this.compileEnv, name) });
-        } else {
+        } else if (ctx.expression()) {
             this.visit(ctx.expression());
+        } else if (ctx.functionCall()) {
+            this.visitFunctionCall(ctx.functionCall());
         }
     }
 
@@ -345,6 +397,7 @@ export class SimpleLangEvaluator extends BasicEvaluator {
             const result = this.run()
             
             // Send the result to the REPL
+            this.conductor.sendOutput(`Result of expression: 1`);
             this.conductor.sendOutput(`Result of expression: ${result}`);
         }  catch (error) {
             // Handle errors and send them to the REPL
@@ -496,6 +549,43 @@ export class SimpleLangEvaluator extends BasicEvaluator {
 
                 case 'GOTO': {
                     pc = instr.addr;
+                    break;
+                }
+
+                case 'LDF': {
+                    const closure = this.heap.allocateClosure(instr.arity, instr.addr, this.env);
+                    this.OS.push(closure);
+                    pc++;
+                    break;
+                }
+
+                case 'CALL': {
+                    const arity = instr.arity;
+                    const fun = this.OS[this.OS.length - arity - 1];
+
+                    const frame = this.heap.allocateFrame(arity);
+                    for (let i = arity -1; i >= 0; i--){
+                        this.heap.frameSet(frame, i , this.OS.pop()) 
+                    } 
+                
+                    this.OS.pop();
+                    const newEnv = this.heap.extendEnvironment(this.heap.getClosureEnv(fun), frame);
+                    pc = pc + 1; 
+                    this.RTS.push(this.heap.allocateCallFrame(this.env, pc));
+                    this.env = newEnv;
+                    pc = this.heap.getClosurePC(fun);
+                    break;
+                }
+
+                case 'RESET': {
+                    let frame;
+                    do {
+                        frame = this.RTS.pop();
+                        if (!frame) throw new Error("RESET with empty RTS");
+                    } while (!this.heap.isCallFrame(frame));
+                
+                    pc = this.heap.getCallFramePC(frame);
+                    this.env = this.heap.getCallFrameEnv(frame);
                     break;
                 }
 

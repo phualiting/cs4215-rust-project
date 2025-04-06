@@ -10,4 +10,8 @@ export type Instruction =
     | { tag: 'JOF'; addr: number }
     | { tag: 'GOTO'; addr: number }
     | { tag: 'BREAK' }
+    | { tag: 'LDF'; arity: number; addr: number }
+    | { tag: 'CALL'; arity: number }
+    | { tag: 'RESET' } 
     | { tag: 'DONE' };
+    

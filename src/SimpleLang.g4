@@ -18,6 +18,8 @@ statement
     | loopStatement
     | breakStatement ';'
     | continueStatement ';'
+    | functionDeclaration
+    | returnStatement
     ;
 
 block
@@ -42,6 +44,26 @@ breakStatement
 
 continueStatement
     : 'continue'
+    ;
+
+functionDeclaration
+    : 'fn' IDENTIFIER '(' parameterList? ')' block
+    ;
+
+parameterList
+    : IDENTIFIER (',' IDENTIFIER)*
+    ;
+
+functionCall
+    : IDENTIFIER '(' argumentList? ')'
+    ;
+
+argumentList
+    : expression (',' expression)*
+    ;
+
+returnStatement
+    : 'return' expression? ';'
     ;
 
 letDeclaration
@@ -94,6 +116,7 @@ primaryExpr
     : literal
     | IDENTIFIER
     | '(' expression ')'
+    | functionCall
     ;
 
 literal

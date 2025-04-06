@@ -12,6 +12,11 @@ import { WhileLoopContext } from "./SimpleLangParser.js";
 import { LoopStatementContext } from "./SimpleLangParser.js";
 import { BreakStatementContext } from "./SimpleLangParser.js";
 import { ContinueStatementContext } from "./SimpleLangParser.js";
+import { FunctionDeclarationContext } from "./SimpleLangParser.js";
+import { ParameterListContext } from "./SimpleLangParser.js";
+import { FunctionCallContext } from "./SimpleLangParser.js";
+import { ArgumentListContext } from "./SimpleLangParser.js";
+import { ReturnStatementContext } from "./SimpleLangParser.js";
 import { LetDeclarationContext } from "./SimpleLangParser.js";
 import { MutabilityContext } from "./SimpleLangParser.js";
 import { AssignmentContext } from "./SimpleLangParser.js";
@@ -122,6 +127,56 @@ export class SimpleLangListener implements ParseTreeListener {
      * @param ctx the parse tree
      */
     exitContinueStatement?: (ctx: ContinueStatementContext) => void;
+    /**
+     * Enter a parse tree produced by `SimpleLangParser.functionDeclaration`.
+     * @param ctx the parse tree
+     */
+    enterFunctionDeclaration?: (ctx: FunctionDeclarationContext) => void;
+    /**
+     * Exit a parse tree produced by `SimpleLangParser.functionDeclaration`.
+     * @param ctx the parse tree
+     */
+    exitFunctionDeclaration?: (ctx: FunctionDeclarationContext) => void;
+    /**
+     * Enter a parse tree produced by `SimpleLangParser.parameterList`.
+     * @param ctx the parse tree
+     */
+    enterParameterList?: (ctx: ParameterListContext) => void;
+    /**
+     * Exit a parse tree produced by `SimpleLangParser.parameterList`.
+     * @param ctx the parse tree
+     */
+    exitParameterList?: (ctx: ParameterListContext) => void;
+    /**
+     * Enter a parse tree produced by `SimpleLangParser.functionCall`.
+     * @param ctx the parse tree
+     */
+    enterFunctionCall?: (ctx: FunctionCallContext) => void;
+    /**
+     * Exit a parse tree produced by `SimpleLangParser.functionCall`.
+     * @param ctx the parse tree
+     */
+    exitFunctionCall?: (ctx: FunctionCallContext) => void;
+    /**
+     * Enter a parse tree produced by `SimpleLangParser.argumentList`.
+     * @param ctx the parse tree
+     */
+    enterArgumentList?: (ctx: ArgumentListContext) => void;
+    /**
+     * Exit a parse tree produced by `SimpleLangParser.argumentList`.
+     * @param ctx the parse tree
+     */
+    exitArgumentList?: (ctx: ArgumentListContext) => void;
+    /**
+     * Enter a parse tree produced by `SimpleLangParser.returnStatement`.
+     * @param ctx the parse tree
+     */
+    enterReturnStatement?: (ctx: ReturnStatementContext) => void;
+    /**
+     * Exit a parse tree produced by `SimpleLangParser.returnStatement`.
+     * @param ctx the parse tree
+     */
+    exitReturnStatement?: (ctx: ReturnStatementContext) => void;
     /**
      * Enter a parse tree produced by `SimpleLangParser.letDeclaration`.
      * @param ctx the parse tree

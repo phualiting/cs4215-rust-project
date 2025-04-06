@@ -12,6 +12,11 @@ import { WhileLoopContext } from "./SimpleLangParser.js";
 import { LoopStatementContext } from "./SimpleLangParser.js";
 import { BreakStatementContext } from "./SimpleLangParser.js";
 import { ContinueStatementContext } from "./SimpleLangParser.js";
+import { FunctionDeclarationContext } from "./SimpleLangParser.js";
+import { ParameterListContext } from "./SimpleLangParser.js";
+import { FunctionCallContext } from "./SimpleLangParser.js";
+import { ArgumentListContext } from "./SimpleLangParser.js";
+import { ReturnStatementContext } from "./SimpleLangParser.js";
 import { LetDeclarationContext } from "./SimpleLangParser.js";
 import { MutabilityContext } from "./SimpleLangParser.js";
 import { AssignmentContext } from "./SimpleLangParser.js";
@@ -89,6 +94,36 @@ export class SimpleLangVisitor<Result> extends AbstractParseTreeVisitor<Result> 
      * @return the visitor result
      */
     visitContinueStatement?: (ctx: ContinueStatementContext) => Result;
+    /**
+     * Visit a parse tree produced by `SimpleLangParser.functionDeclaration`.
+     * @param ctx the parse tree
+     * @return the visitor result
+     */
+    visitFunctionDeclaration?: (ctx: FunctionDeclarationContext) => Result;
+    /**
+     * Visit a parse tree produced by `SimpleLangParser.parameterList`.
+     * @param ctx the parse tree
+     * @return the visitor result
+     */
+    visitParameterList?: (ctx: ParameterListContext) => Result;
+    /**
+     * Visit a parse tree produced by `SimpleLangParser.functionCall`.
+     * @param ctx the parse tree
+     * @return the visitor result
+     */
+    visitFunctionCall?: (ctx: FunctionCallContext) => Result;
+    /**
+     * Visit a parse tree produced by `SimpleLangParser.argumentList`.
+     * @param ctx the parse tree
+     * @return the visitor result
+     */
+    visitArgumentList?: (ctx: ArgumentListContext) => Result;
+    /**
+     * Visit a parse tree produced by `SimpleLangParser.returnStatement`.
+     * @param ctx the parse tree
+     * @return the visitor result
+     */
+    visitReturnStatement?: (ctx: ReturnStatementContext) => Result;
     /**
      * Visit a parse tree produced by `SimpleLangParser.letDeclaration`.
      * @param ctx the parse tree
