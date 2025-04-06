@@ -6,6 +6,7 @@ import { AdditiveExprContext, AssignmentContext, BlockContext, EqualityExprConte
 import { SimpleLangVisitor } from './parser/src/SimpleLangVisitor';
 import { Instruction } from "./RustLangInstructionTypes";
 import { Heap } from "./Heap";
+import TypeCheckerVisitor from "./TypeCheckerVisitor";
 
 class SimpleLangEvaluatorVisitor extends AbstractParseTreeVisitor<void> implements SimpleLangVisitor<void> {
     private instructions: Instruction[];
@@ -222,8 +223,6 @@ class SimpleLangEvaluatorVisitor extends AbstractParseTreeVisitor<void> implemen
             pos: this.compile_time_environment_position(this.compileEnv, name)
         });
     }
-    
-    
 
     visitFunctionCall(ctx: FunctionCallContext): void {
         const name = ctx.IDENTIFIER().getText();
@@ -244,7 +243,6 @@ class SimpleLangEvaluatorVisitor extends AbstractParseTreeVisitor<void> implemen
         this.emit({ tag: 'RESET' });
     }
     
-
     visitLetDeclaration(ctx: LetDeclarationContext): void {
         const name = ctx.IDENTIFIER().getText();
         const isMutable = ctx.mutability() !== null;
@@ -390,6 +388,8 @@ export class SimpleLangEvaluator extends BasicEvaluator {
             
             // Parse the input
             const tree = parser.prog();
+            const typeChecker = new TypeCheckerVisitor();
+            typeChecker.visit(tree);
             
             // Evaluate the parsed tree
             this.visitor.visit(tree);
@@ -397,7 +397,7 @@ export class SimpleLangEvaluator extends BasicEvaluator {
             const result = this.run()
             
             // Send the result to the REPL
-            this.conductor.sendOutput(`Result of expression: 1`);
+            this.conductor.sendOutput(`Result of expression: 2`);
             this.conductor.sendOutput(`Result of expression: ${result}`);
         }  catch (error) {
             // Handle errors and send them to the REPL
