@@ -1,7 +1,7 @@
 import { AbstractParseTreeVisitor } from 'antlr4ng';
 import { SimpleLangVisitor } from './parser/src/SimpleLangVisitor';
-import { AdditiveExprContext, AssignmentContext, BorrowExpressionContext, DerefExpressionContext, EqualityExprContext, ExpressionContext, LetDeclarationContext, LiteralContext, LogicalAndExprContext, LogicalOrExprContext, MultiplicativeExprContext, PrimaryExprContext, RelationalExprContext, UnaryExprContext } from './parser/src/SimpleLangParser';
-import { Type, NumberType, BooleanType, ReferenceType } from './Type';
+import { AdditiveExprContext, AssignmentContext, BlockContext, BorrowExpressionContext, DerefExpressionContext, EqualityExprContext, ExpressionContext, FunctionCallContext, FunctionDeclarationContext, IfStatementContext, LetDeclarationContext, LiteralContext, LogicalAndExprContext, LogicalOrExprContext, MultiplicativeExprContext, PrimaryExprContext, RelationalExprContext, ReturnStatementContext, StatementListContext, UnaryExprContext, WhileLoopContext } from './parser/src/SimpleLangParser';
+import { Type, NumberType, BooleanType, ReferenceType, VoidType, FunctionType } from './Type';
 
 
 class TypeCheckerVisitor extends AbstractParseTreeVisitor<Type> implements SimpleLangVisitor<Type> {
@@ -21,6 +21,109 @@ class TypeCheckerVisitor extends AbstractParseTreeVisitor<Type> implements Simpl
     
     private defineVarType(name: string, type: Type): void {
         this.typeEnv[this.typeEnv.length - 1].set(name, type);
+    }
+
+    visitStatementList(ctx: StatementListContext): Type {
+        for (const stmt of ctx.statement()) {
+            this.visit(stmt);
+        }
+        return VoidType.getInstance();
+    }
+    
+    visitBlock(ctx: BlockContext): Type {
+        this.typeEnv.push(new Map());
+        const result = this.visit(ctx.statementList());
+        this.typeEnv.pop();
+        return result;
+    }
+    
+    visitIfStatement(ctx: IfStatementContext): Type {
+        const condType = this.visit(ctx.expression());
+        if (!condType.compare(BooleanType.getInstance())) {
+            throw new Error('Condition of if must be a boolean');
+        }
+    
+        this.visit(ctx.block(0));
+        if (ctx.block(1)) {
+            this.visit(ctx.block(1));
+        } else if (ctx.ifStatement()) {
+            this.visit(ctx.ifStatement());
+        }
+    
+        return VoidType.getInstance();
+    }
+    
+    visitWhileLoop(ctx: WhileLoopContext): Type {
+        const condType = this.visit(ctx.expression());
+        if (!condType.compare(BooleanType.getInstance())) {
+            throw new Error('Condition of while loop must be a boolean');
+        }
+    
+        this.visit(ctx.block());
+        return VoidType.getInstance();
+    }
+    
+    visitFunctionDeclaration(ctx: FunctionDeclarationContext): Type {
+        const name = ctx.IDENTIFIER().getText();
+        const paramNames = ctx.parameterList()?.IDENTIFIER().map(id => id.getText()) || [];
+        const paramTypes = Array(paramNames.length).fill(NumberType.getInstance());
+    
+        const funcType = new FunctionType(paramTypes, VoidType.getInstance());
+        this.defineVarType(name, funcType);
+    
+        this.typeEnv.push(new Map());
+        for (let i = 0; i < paramNames.length; i++) {
+            this.defineVarType(paramNames[i], paramTypes[i]);
+        }
+    
+        const statements = ctx.block().statementList().statement();
+        let returnType: Type = VoidType.getInstance();
+    
+        for (let i = 0; i < statements.length; i++) {
+            const stmt = statements[i];
+            if (stmt.returnStatement()) {
+                returnType = this.visitReturnStatement(stmt.returnStatement());
+            } else if (i === statements.length - 1 && stmt.expression()) {
+                returnType = this.visit(stmt.expression());
+            } else {
+                this.visit(stmt);
+            }
+        }
+    
+        this.typeEnv.pop();
+        funcType.returnType = returnType;
+        return VoidType.getInstance();
+    }
+    
+    visitFunctionCall(ctx: FunctionCallContext): Type {
+        const name = ctx.IDENTIFIER().getText();
+        const funcType = this.lookupVarType(name);
+    
+        if (!(funcType instanceof FunctionType)) {
+            throw new Error(`${name} is not a function`);
+        }
+    
+        const args = ctx.argumentList()?.expression() || [];
+    
+        if (args.length !== funcType.paramTypes.length) {
+            throw new Error(`Function ${name} expects ${funcType.paramTypes.length} arguments, got ${args.length}`);
+        }
+    
+        for (let i = 0; i < args.length; i++) {
+            const argType = this.visit(args[i]);
+            const expectedType = funcType.paramTypes[i];
+            if (!argType.compare(expectedType)) {
+                throw new Error(`Argument ${i + 1} of function ${name} has type mismatch`);
+            }
+        }
+        return funcType.returnType;
+    }
+    
+    visitReturnStatement(ctx: ReturnStatementContext): Type {
+        if (ctx.expression()) {
+            return this.visit(ctx.expression());
+        }
+        return VoidType.getInstance();
     }
     
     visitExpression(ctx: ExpressionContext): Type {
@@ -191,6 +294,8 @@ class TypeCheckerVisitor extends AbstractParseTreeVisitor<Type> implements Simpl
             return this.visit(ctx.literal());
         } else if (ctx.expression()) {
             return this.visit(ctx.expression());
+        } else if (ctx.functionCall()) {
+            return this.visit(ctx.functionCall());
         } else if (ctx.IDENTIFIER()) {
             return this.lookupVarType(ctx.IDENTIFIER().getText());
         }

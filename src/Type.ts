@@ -44,6 +44,24 @@ export class ReferenceType extends Type {
         return new ReferenceType(inner);
     }
 }
+
+export class FunctionType implements Type {
+    constructor(public paramTypes: Type[], public returnType: Type) {}
+
+    compare(other: Type): boolean {
+        if (!(other instanceof FunctionType)) return false;
+        if (this.paramTypes.length !== other.paramTypes.length) return false;
+        for (let i = 0; i < this.paramTypes.length; i++) {
+            if (!this.paramTypes[i].compare(other.paramTypes[i])) return false;
+        }
+        return this.returnType.compare(other.returnType);
+    }
+
+    toString(): string {
+        const params = this.paramTypes.map(p => p.toString()).join(", ");
+        return `fn(${params}) -> ${this.returnType.toString()}`;
+    }
+}
   
 export class VoidType extends Type {
     private static instance: VoidType | null = null;
