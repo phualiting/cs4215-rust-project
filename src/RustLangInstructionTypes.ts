@@ -13,5 +13,7 @@ export type Instruction =
     | { tag: 'LDF'; arity: number; addr: number }
     | { tag: 'CALL'; arity: number }
     | { tag: 'RESET' } 
+    | { tag: 'BORROW'; pos: [number, number]; mut: boolean }
+    | { tag: 'DEREF'}
+    | { tag: 'DEREF_ASSIGN' }
     | { tag: 'DONE' };
-    

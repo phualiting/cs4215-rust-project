@@ -76,10 +76,12 @@ mutability
 
 assignment
     : IDENTIFIER '=' expression
+    | derefExpression '=' expression
     ;
 
 expression
-    : borrowExpression
+    : derefExpression
+    | borrowExpression
     | logicalOrExpr
     ;
 
@@ -109,6 +111,7 @@ multiplicativeExpr
 
 unaryExpr
     : ('-' | '!') unaryExpr
+    | derefExpression
     | borrowExpression
     | primaryExpr
     ;

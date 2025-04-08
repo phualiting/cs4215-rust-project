@@ -26,6 +26,24 @@ export class BooleanType extends Type {
     toString(): string { return "boolean"; }
     compare(other: Type): boolean { return other instanceof BooleanType; }
 }
+
+export class ReferenceType extends Type {
+    constructor(public readonly inner: Type) {
+        super();
+    }
+
+    compare(other: Type): boolean {
+        return other instanceof ReferenceType && this.inner.compare(other.inner);
+    }
+
+    toString(): string {
+        return `&${this.inner.toString()}`;
+    }
+
+    static of(inner: Type): ReferenceType {
+        return new ReferenceType(inner);
+    }
+}
   
 export class VoidType extends Type {
     private static instance: VoidType | null = null;

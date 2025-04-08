@@ -70,6 +70,26 @@ export class Heap {
         return this.heap.getUint16(addr * WORD_SIZE + offset);
     }
 
+    allocateReference(targetAddr: number, isMutable: boolean): number {
+        const addr = this.allocate(Tag.Pair, 2);
+        this.setWord(addr + 1, targetAddr);          
+        this.setWord(addr + 2, isMutable ? 1 : 0);  
+        return addr;
+    }
+    
+    getRefTarget(addr: number): number {
+        return this.getWord(addr + 1);
+    }
+    
+    isReference(addr: number): boolean {
+        return this.getTag(addr) === Tag.Pair; 
+    }
+    
+    getVarAddress(env: number, [frameIdx, valIdx]: [number, number]): number {
+        const frame = this.getChild(env, frameIdx);
+        return frame + 1 + valIdx;
+    }
+
     public setWord(addr: number, value: number): void {
         this.heap.setFloat64(addr * WORD_SIZE, value);
     }

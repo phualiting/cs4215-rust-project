@@ -8,6 +8,7 @@ import { Instruction } from "./RustLangInstructionTypes";
 import { Heap } from "./Heap";
 import TypeCheckerVisitor from "./TypeCheckerVisitor";
 import OwnershipVisitor from "./OwnershipVisitor";
+import { BorrowExpressionContext, DerefExpressionContext } from './parser/src/SimpleLangParser';
 
 class SimpleLangEvaluatorVisitor extends AbstractParseTreeVisitor<void> implements SimpleLangVisitor<void> {
     private instructions: Instruction[];
@@ -255,17 +256,50 @@ class SimpleLangEvaluatorVisitor extends AbstractParseTreeVisitor<void> implemen
     }
 
     visitAssignment(ctx: AssignmentContext): void {
-        const name = ctx.IDENTIFIER().getText();
-        if (!this.mutabilityMap.get(name)) {
-            throw new Error(`Cannot assign to immutable variable '${name}'`);
+        if (ctx.IDENTIFIER()) {
+            const name = ctx.IDENTIFIER().getText();
+            if (!this.mutabilityMap.get(name)) {
+                throw new Error(`Cannot assign to immutable variable '${name}'`);
+            }
+            this.visit(ctx.expression());
+            this.emit({ tag: 'ASSIGN', pos: this.compile_time_environment_position(this.compileEnv, name) });
+        } else if (ctx.derefExpression()) {
+            const derefExpr = ctx.derefExpression();
+            const targetName = derefExpr._target.text;
+        
+            this.emit({ tag: 'LD', pos: this.compile_time_environment_position(this.compileEnv, targetName) });
+        
+            this.visit(ctx.expression());
+        
+            this.emit({ tag: 'DEREF_ASSIGN' });
         }
-        this.visit(ctx.expression());
-        this.emit({ tag: 'ASSIGN', pos: this.compile_time_environment_position(this.compileEnv, name) });
+    }
+
+    visitBorrowExpression(ctx: BorrowExpressionContext): void {
+        const varName = ctx._target.text;
+        const isMut = ctx._mutKeyword !== undefined;
+        const pos = this.compile_time_environment_position(this.compileEnv, varName);
+        
+        this.emit({ tag: 'BORROW', pos, mut: isMut });
+        
+    }
+    
+    visitDerefExpression(ctx: DerefExpressionContext): void {
+        const name = ctx._target.text;
+        const pos = this.compile_time_environment_position(this.compileEnv, name);
+        this.emit({ tag: 'LD', pos });
+        this.emit({ tag: 'DEREF' });
     }
 
     // Visit a parse tree produced by SimpleLangParser#expression
     visitExpression(ctx: ExpressionContext): void {
-        this.visit(ctx.logicalOrExpr())
+        if (ctx.derefExpression()) {
+            return this.visitDerefExpression(ctx.derefExpression());
+        } else if (ctx.borrowExpression()) {
+            return this.visitBorrowExpression(ctx.borrowExpression());
+        } else {
+            return this.visit(ctx.logicalOrExpr());
+        }
     }
 
     visitLogicalOrExpr(ctx: LogicalOrExprContext): void {
@@ -327,6 +361,10 @@ class SimpleLangEvaluatorVisitor extends AbstractParseTreeVisitor<void> implemen
             const op = ctx.getChild(0).getText(); // '-' or '!'
             this.visit(ctx.unaryExpr());
             this.emit({ tag: 'UNOP', op: op as '-' | '!' });
+        } else if (ctx.borrowExpression()) {
+            this.visit(ctx.borrowExpression());
+        } else if (ctx.derefExpression()) {
+            this.visit(ctx.derefExpression());
         } else {
             this.visit(ctx.primaryExpr());
         }
@@ -389,12 +427,10 @@ export class SimpleLangEvaluator extends BasicEvaluator {
             
             // Parse the input
             const tree = parser.prog();
-            // const typeChecker = new TypeCheckerVisitor();
-            // typeChecker.visit(tree);
-            this.conductor.sendOutput(`here 1`);
+            const typeChecker = new TypeCheckerVisitor();
+            typeChecker.visit(tree);
             const ownershipChecker = new OwnershipVisitor();
             ownershipChecker.visit(tree);
-            this.conductor.sendOutput(`here 2`);
             
             // Evaluate the parsed tree
             this.visitor.visit(tree);
@@ -402,7 +438,6 @@ export class SimpleLangEvaluator extends BasicEvaluator {
             const result = this.run()
             
             // Send the result to the REPL
-            this.conductor.sendOutput(`Result of expression: 2`);
             this.conductor.sendOutput(`Result of expression: ${result}`);
         }  catch (error) {
             // Handle errors and send them to the REPL
@@ -591,6 +626,45 @@ export class SimpleLangEvaluator extends BasicEvaluator {
                 
                     pc = this.heap.getCallFramePC(frame);
                     this.env = this.heap.getCallFrameEnv(frame);
+                    break;
+                }
+                
+                case 'BORROW': {
+                    const [frameIdx, valueIdx] = instr.pos;
+                    const varAddr = this.heap.getVarAddress(this.env, [frameIdx, valueIdx]);
+                    const refAddr = this.heap.allocateReference(varAddr, instr.mut);
+                    this.OS.push(refAddr);
+                    pc++;
+                    break;
+                }
+
+                case 'DEREF': {
+                    const refAddr = this.OS.pop();
+                    
+                    if (!this.heap.isReference(refAddr)) {
+                        throw new Error("Cannot dereference a non-reference");
+                    }
+                
+                    const targetAddr = this.heap.getRefTarget(refAddr);
+                    const value = this.heap.getWord(targetAddr);
+                    this.OS.push(value);
+                    pc++;
+                    break;
+                }
+
+                case 'DEREF_ASSIGN': {
+                    const value = this.OS.pop();
+                    const ref = this.OS.pop();
+                
+                    if (!this.heap.isReference(ref)) {
+                        throw new Error("Attempted to assign to a non-reference");
+                    }
+                
+                    const targetAddr = this.heap.getRefTarget(ref);
+                    this.heap.setWord(targetAddr, value);
+                
+                    this.OS.push(value);
+                    pc++;
                     break;
                 }
 
