@@ -81,7 +81,7 @@ returnType
     ;
 
 letDeclaration
-    : 'let' mutability? IDENTIFIER '=' expression
+    : 'let' mutability? IDENTIFIER typeAnnotation? '=' expression
     ;
 
 mutability

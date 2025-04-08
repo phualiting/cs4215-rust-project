@@ -273,6 +273,14 @@ class TypeCheckerVisitor extends AbstractParseTreeVisitor<Type> implements Simpl
     visitLetDeclaration(ctx: LetDeclarationContext): Type {
         const name = ctx.IDENTIFIER().getText();
         const exprType = this.visit(ctx.expression());
+    
+        if (ctx.typeAnnotation()) {
+            const annotatedType = stringToType(ctx.typeAnnotation().getText());
+            if (!annotatedType.compare(exprType)) {
+                throw new Error(`Type mismatch in declaration of '${name}': expected ${annotatedType}, got ${exprType}`);
+            }
+        }
+    
         this.defineVarType(name, exprType);
         return exprType;
     }
