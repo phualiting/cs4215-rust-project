@@ -13,10 +13,13 @@ import { LoopStatementContext } from "./SimpleLangParser.js";
 import { BreakStatementContext } from "./SimpleLangParser.js";
 import { ContinueStatementContext } from "./SimpleLangParser.js";
 import { FunctionDeclarationContext } from "./SimpleLangParser.js";
-import { ParameterListContext } from "./SimpleLangParser.js";
+import { TypedParameterListContext } from "./SimpleLangParser.js";
+import { TypedParameterContext } from "./SimpleLangParser.js";
+import { TypeAnnotationContext } from "./SimpleLangParser.js";
 import { FunctionCallContext } from "./SimpleLangParser.js";
 import { ArgumentListContext } from "./SimpleLangParser.js";
 import { ReturnStatementContext } from "./SimpleLangParser.js";
+import { ReturnTypeContext } from "./SimpleLangParser.js";
 import { LetDeclarationContext } from "./SimpleLangParser.js";
 import { MutabilityContext } from "./SimpleLangParser.js";
 import { AssignmentContext } from "./SimpleLangParser.js";
@@ -103,11 +106,23 @@ export class SimpleLangVisitor<Result> extends AbstractParseTreeVisitor<Result> 
      */
     visitFunctionDeclaration?: (ctx: FunctionDeclarationContext) => Result;
     /**
-     * Visit a parse tree produced by `SimpleLangParser.parameterList`.
+     * Visit a parse tree produced by `SimpleLangParser.typedParameterList`.
      * @param ctx the parse tree
      * @return the visitor result
      */
-    visitParameterList?: (ctx: ParameterListContext) => Result;
+    visitTypedParameterList?: (ctx: TypedParameterListContext) => Result;
+    /**
+     * Visit a parse tree produced by `SimpleLangParser.typedParameter`.
+     * @param ctx the parse tree
+     * @return the visitor result
+     */
+    visitTypedParameter?: (ctx: TypedParameterContext) => Result;
+    /**
+     * Visit a parse tree produced by `SimpleLangParser.typeAnnotation`.
+     * @param ctx the parse tree
+     * @return the visitor result
+     */
+    visitTypeAnnotation?: (ctx: TypeAnnotationContext) => Result;
     /**
      * Visit a parse tree produced by `SimpleLangParser.functionCall`.
      * @param ctx the parse tree
@@ -126,6 +141,12 @@ export class SimpleLangVisitor<Result> extends AbstractParseTreeVisitor<Result> 
      * @return the visitor result
      */
     visitReturnStatement?: (ctx: ReturnStatementContext) => Result;
+    /**
+     * Visit a parse tree produced by `SimpleLangParser.returnType`.
+     * @param ctx the parse tree
+     * @return the visitor result
+     */
+    visitReturnType?: (ctx: ReturnTypeContext) => Result;
     /**
      * Visit a parse tree produced by `SimpleLangParser.letDeclaration`.
      * @param ctx the parse tree

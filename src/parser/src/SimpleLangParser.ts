@@ -44,10 +44,15 @@ export class SimpleLangParser extends antlr.Parser {
     public static readonly T__29 = 30;
     public static readonly T__30 = 31;
     public static readonly T__31 = 32;
-    public static readonly INT = 33;
-    public static readonly BOOL = 34;
-    public static readonly IDENTIFIER = 35;
-    public static readonly WS = 36;
+    public static readonly T__32 = 33;
+    public static readonly T__33 = 34;
+    public static readonly T__34 = 35;
+    public static readonly T__35 = 36;
+    public static readonly T__36 = 37;
+    public static readonly INT = 38;
+    public static readonly BOOL = 39;
+    public static readonly IDENTIFIER = 40;
+    public static readonly WS = 41;
     public static readonly RULE_prog = 0;
     public static readonly RULE_statementList = 1;
     public static readonly RULE_statement = 2;
@@ -58,48 +63,52 @@ export class SimpleLangParser extends antlr.Parser {
     public static readonly RULE_breakStatement = 7;
     public static readonly RULE_continueStatement = 8;
     public static readonly RULE_functionDeclaration = 9;
-    public static readonly RULE_parameterList = 10;
-    public static readonly RULE_functionCall = 11;
-    public static readonly RULE_argumentList = 12;
-    public static readonly RULE_returnStatement = 13;
-    public static readonly RULE_letDeclaration = 14;
-    public static readonly RULE_mutability = 15;
-    public static readonly RULE_assignment = 16;
-    public static readonly RULE_expression = 17;
-    public static readonly RULE_logicalOrExpr = 18;
-    public static readonly RULE_logicalAndExpr = 19;
-    public static readonly RULE_equalityExpr = 20;
-    public static readonly RULE_relationalExpr = 21;
-    public static readonly RULE_additiveExpr = 22;
-    public static readonly RULE_multiplicativeExpr = 23;
-    public static readonly RULE_unaryExpr = 24;
-    public static readonly RULE_borrowExpression = 25;
-    public static readonly RULE_derefExpression = 26;
-    public static readonly RULE_primaryExpr = 27;
-    public static readonly RULE_literal = 28;
+    public static readonly RULE_typedParameterList = 10;
+    public static readonly RULE_typedParameter = 11;
+    public static readonly RULE_typeAnnotation = 12;
+    public static readonly RULE_functionCall = 13;
+    public static readonly RULE_argumentList = 14;
+    public static readonly RULE_returnStatement = 15;
+    public static readonly RULE_returnType = 16;
+    public static readonly RULE_letDeclaration = 17;
+    public static readonly RULE_mutability = 18;
+    public static readonly RULE_assignment = 19;
+    public static readonly RULE_expression = 20;
+    public static readonly RULE_logicalOrExpr = 21;
+    public static readonly RULE_logicalAndExpr = 22;
+    public static readonly RULE_equalityExpr = 23;
+    public static readonly RULE_relationalExpr = 24;
+    public static readonly RULE_additiveExpr = 25;
+    public static readonly RULE_multiplicativeExpr = 26;
+    public static readonly RULE_unaryExpr = 27;
+    public static readonly RULE_borrowExpression = 28;
+    public static readonly RULE_derefExpression = 29;
+    public static readonly RULE_primaryExpr = 30;
+    public static readonly RULE_literal = 31;
 
     public static readonly literalNames = [
         null, "';'", "'{'", "'}'", "'if'", "'else'", "'while'", "'loop'", 
-        "'break'", "'continue'", "'fn'", "'('", "')'", "','", "'return'", 
-        "'let'", "'='", "'mut'", "'||'", "'&&'", "'=='", "'!='", "'<'", 
-        "'<='", "'>'", "'>='", "'+'", "'-'", "'*'", "'/'", "'%'", "'!'", 
-        "'&'"
+        "'break'", "'continue'", "'fn'", "'('", "')'", "','", "':'", "'f64'", 
+        "'bool'", "'void'", "'return'", "'->'", "'let'", "'='", "'mut'", 
+        "'||'", "'&&'", "'=='", "'!='", "'<'", "'<='", "'>'", "'>='", "'+'", 
+        "'-'", "'*'", "'/'", "'%'", "'!'", "'&'"
     ];
 
     public static readonly symbolicNames = [
         null, null, null, null, null, null, null, null, null, null, null, 
         null, null, null, null, null, null, null, null, null, null, null, 
         null, null, null, null, null, null, null, null, null, null, null, 
-        "INT", "BOOL", "IDENTIFIER", "WS"
+        null, null, null, null, null, "INT", "BOOL", "IDENTIFIER", "WS"
     ];
     public static readonly ruleNames = [
         "prog", "statementList", "statement", "block", "ifStatement", "whileLoop", 
         "loopStatement", "breakStatement", "continueStatement", "functionDeclaration", 
-        "parameterList", "functionCall", "argumentList", "returnStatement", 
-        "letDeclaration", "mutability", "assignment", "expression", "logicalOrExpr", 
-        "logicalAndExpr", "equalityExpr", "relationalExpr", "additiveExpr", 
-        "multiplicativeExpr", "unaryExpr", "borrowExpression", "derefExpression", 
-        "primaryExpr", "literal",
+        "typedParameterList", "typedParameter", "typeAnnotation", "functionCall", 
+        "argumentList", "returnStatement", "returnType", "letDeclaration", 
+        "mutability", "assignment", "expression", "logicalOrExpr", "logicalAndExpr", 
+        "equalityExpr", "relationalExpr", "additiveExpr", "multiplicativeExpr", 
+        "unaryExpr", "borrowExpression", "derefExpression", "primaryExpr", 
+        "literal",
     ];
 
     public get grammarFileName(): string { return "SimpleLang.g4"; }
@@ -122,9 +131,9 @@ export class SimpleLangParser extends antlr.Parser {
         try {
             this.enterOuterAlt(localContext, 1);
             {
-            this.state = 58;
+            this.state = 64;
             this.statementList();
-            this.state = 59;
+            this.state = 65;
             this.match(SimpleLangParser.EOF);
             }
         }
@@ -148,20 +157,20 @@ export class SimpleLangParser extends antlr.Parser {
         try {
             this.enterOuterAlt(localContext, 1);
             {
-            this.state = 62;
+            this.state = 68;
             this.errorHandler.sync(this);
             _la = this.tokenStream.LA(1);
             do {
                 {
                 {
-                this.state = 61;
+                this.state = 67;
                 this.statement();
                 }
                 }
-                this.state = 64;
+                this.state = 70;
                 this.errorHandler.sync(this);
                 _la = this.tokenStream.LA(1);
-            } while ((((_la) & ~0x1F) === 0 && ((1 << _la) & 2550190036) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & 15) !== 0));
+            } while ((((_la) & ~0x1F) === 0 && ((1 << _la) & 1314772) !== 0) || ((((_la - 32)) & ~0x1F) === 0 && ((1 << (_la - 32)) & 499) !== 0));
             }
         }
         catch (re) {
@@ -181,93 +190,93 @@ export class SimpleLangParser extends antlr.Parser {
         let localContext = new StatementContext(this.context, this.state);
         this.enterRule(localContext, 4, SimpleLangParser.RULE_statement);
         try {
-            this.state = 87;
+            this.state = 93;
             this.errorHandler.sync(this);
             switch (this.interpreter.adaptivePredict(this.tokenStream, 1, this.context) ) {
             case 1:
                 this.enterOuterAlt(localContext, 1);
                 {
-                this.state = 66;
+                this.state = 72;
                 this.letDeclaration();
-                this.state = 67;
+                this.state = 73;
                 this.match(SimpleLangParser.T__0);
                 }
                 break;
             case 2:
                 this.enterOuterAlt(localContext, 2);
                 {
-                this.state = 69;
+                this.state = 75;
                 this.assignment();
-                this.state = 70;
+                this.state = 76;
                 this.match(SimpleLangParser.T__0);
                 }
                 break;
             case 3:
                 this.enterOuterAlt(localContext, 3);
                 {
-                this.state = 72;
+                this.state = 78;
                 this.expression();
-                this.state = 73;
+                this.state = 79;
                 this.match(SimpleLangParser.T__0);
                 }
                 break;
             case 4:
                 this.enterOuterAlt(localContext, 4);
                 {
-                this.state = 75;
+                this.state = 81;
                 this.block();
                 }
                 break;
             case 5:
                 this.enterOuterAlt(localContext, 5);
                 {
-                this.state = 76;
+                this.state = 82;
                 this.ifStatement();
                 }
                 break;
             case 6:
                 this.enterOuterAlt(localContext, 6);
                 {
-                this.state = 77;
+                this.state = 83;
                 this.whileLoop();
                 }
                 break;
             case 7:
                 this.enterOuterAlt(localContext, 7);
                 {
-                this.state = 78;
+                this.state = 84;
                 this.loopStatement();
                 }
                 break;
             case 8:
                 this.enterOuterAlt(localContext, 8);
                 {
-                this.state = 79;
+                this.state = 85;
                 this.breakStatement();
-                this.state = 80;
+                this.state = 86;
                 this.match(SimpleLangParser.T__0);
                 }
                 break;
             case 9:
                 this.enterOuterAlt(localContext, 9);
                 {
-                this.state = 82;
+                this.state = 88;
                 this.continueStatement();
-                this.state = 83;
+                this.state = 89;
                 this.match(SimpleLangParser.T__0);
                 }
                 break;
             case 10:
                 this.enterOuterAlt(localContext, 10);
                 {
-                this.state = 85;
+                this.state = 91;
                 this.functionDeclaration();
                 }
                 break;
             case 11:
                 this.enterOuterAlt(localContext, 11);
                 {
-                this.state = 86;
+                this.state = 92;
                 this.returnStatement();
                 }
                 break;
@@ -292,11 +301,11 @@ export class SimpleLangParser extends antlr.Parser {
         try {
             this.enterOuterAlt(localContext, 1);
             {
-            this.state = 89;
+            this.state = 95;
             this.match(SimpleLangParser.T__1);
-            this.state = 90;
+            this.state = 96;
             this.statementList();
-            this.state = 91;
+            this.state = 97;
             this.match(SimpleLangParser.T__2);
             }
         }
@@ -319,28 +328,28 @@ export class SimpleLangParser extends antlr.Parser {
         try {
             this.enterOuterAlt(localContext, 1);
             {
-            this.state = 93;
+            this.state = 99;
             this.match(SimpleLangParser.T__3);
-            this.state = 94;
-            this.expression();
-            this.state = 95;
-            this.block();
             this.state = 100;
+            this.expression();
+            this.state = 101;
+            this.block();
+            this.state = 106;
             this.errorHandler.sync(this);
             switch (this.interpreter.adaptivePredict(this.tokenStream, 2, this.context) ) {
             case 1:
                 {
-                this.state = 96;
+                this.state = 102;
                 this.match(SimpleLangParser.T__4);
-                this.state = 97;
+                this.state = 103;
                 this.ifStatement();
                 }
                 break;
             case 2:
                 {
-                this.state = 98;
+                this.state = 104;
                 this.match(SimpleLangParser.T__4);
-                this.state = 99;
+                this.state = 105;
                 this.block();
                 }
                 break;
@@ -366,11 +375,11 @@ export class SimpleLangParser extends antlr.Parser {
         try {
             this.enterOuterAlt(localContext, 1);
             {
-            this.state = 102;
+            this.state = 108;
             this.match(SimpleLangParser.T__5);
-            this.state = 103;
+            this.state = 109;
             this.expression();
-            this.state = 104;
+            this.state = 110;
             this.block();
             }
         }
@@ -393,9 +402,9 @@ export class SimpleLangParser extends antlr.Parser {
         try {
             this.enterOuterAlt(localContext, 1);
             {
-            this.state = 106;
+            this.state = 112;
             this.match(SimpleLangParser.T__6);
-            this.state = 107;
+            this.state = 113;
             this.block();
             }
         }
@@ -418,7 +427,7 @@ export class SimpleLangParser extends antlr.Parser {
         try {
             this.enterOuterAlt(localContext, 1);
             {
-            this.state = 109;
+            this.state = 115;
             this.match(SimpleLangParser.T__7);
             }
         }
@@ -441,7 +450,7 @@ export class SimpleLangParser extends antlr.Parser {
         try {
             this.enterOuterAlt(localContext, 1);
             {
-            this.state = 111;
+            this.state = 117;
             this.match(SimpleLangParser.T__8);
             }
         }
@@ -465,25 +474,35 @@ export class SimpleLangParser extends antlr.Parser {
         try {
             this.enterOuterAlt(localContext, 1);
             {
-            this.state = 113;
+            this.state = 119;
             this.match(SimpleLangParser.T__9);
-            this.state = 114;
+            this.state = 120;
             this.match(SimpleLangParser.IDENTIFIER);
-            this.state = 115;
+            this.state = 121;
             this.match(SimpleLangParser.T__10);
-            this.state = 117;
+            this.state = 123;
             this.errorHandler.sync(this);
             _la = this.tokenStream.LA(1);
-            if (_la === 35) {
+            if (_la === 40) {
                 {
-                this.state = 116;
-                this.parameterList();
+                this.state = 122;
+                this.typedParameterList();
                 }
             }
 
-            this.state = 119;
+            this.state = 125;
             this.match(SimpleLangParser.T__11);
-            this.state = 120;
+            this.state = 127;
+            this.errorHandler.sync(this);
+            _la = this.tokenStream.LA(1);
+            if (_la === 19) {
+                {
+                this.state = 126;
+                this.returnType();
+                }
+            }
+
+            this.state = 129;
             this.block();
             }
         }
@@ -500,28 +519,28 @@ export class SimpleLangParser extends antlr.Parser {
         }
         return localContext;
     }
-    public parameterList(): ParameterListContext {
-        let localContext = new ParameterListContext(this.context, this.state);
-        this.enterRule(localContext, 20, SimpleLangParser.RULE_parameterList);
+    public typedParameterList(): TypedParameterListContext {
+        let localContext = new TypedParameterListContext(this.context, this.state);
+        this.enterRule(localContext, 20, SimpleLangParser.RULE_typedParameterList);
         let _la: number;
         try {
             this.enterOuterAlt(localContext, 1);
             {
-            this.state = 122;
-            this.match(SimpleLangParser.IDENTIFIER);
-            this.state = 127;
+            this.state = 131;
+            this.typedParameter();
+            this.state = 136;
             this.errorHandler.sync(this);
             _la = this.tokenStream.LA(1);
             while (_la === 13) {
                 {
                 {
-                this.state = 123;
+                this.state = 132;
                 this.match(SimpleLangParser.T__12);
-                this.state = 124;
-                this.match(SimpleLangParser.IDENTIFIER);
+                this.state = 133;
+                this.typedParameter();
                 }
                 }
-                this.state = 129;
+                this.state = 138;
                 this.errorHandler.sync(this);
                 _la = this.tokenStream.LA(1);
             }
@@ -540,28 +559,86 @@ export class SimpleLangParser extends antlr.Parser {
         }
         return localContext;
     }
-    public functionCall(): FunctionCallContext {
-        let localContext = new FunctionCallContext(this.context, this.state);
-        this.enterRule(localContext, 22, SimpleLangParser.RULE_functionCall);
+    public typedParameter(): TypedParameterContext {
+        let localContext = new TypedParameterContext(this.context, this.state);
+        this.enterRule(localContext, 22, SimpleLangParser.RULE_typedParameter);
+        try {
+            this.enterOuterAlt(localContext, 1);
+            {
+            this.state = 139;
+            this.match(SimpleLangParser.IDENTIFIER);
+            this.state = 140;
+            this.match(SimpleLangParser.T__13);
+            this.state = 141;
+            this.typeAnnotation();
+            }
+        }
+        catch (re) {
+            if (re instanceof antlr.RecognitionException) {
+                this.errorHandler.reportError(this, re);
+                this.errorHandler.recover(this, re);
+            } else {
+                throw re;
+            }
+        }
+        finally {
+            this.exitRule();
+        }
+        return localContext;
+    }
+    public typeAnnotation(): TypeAnnotationContext {
+        let localContext = new TypeAnnotationContext(this.context, this.state);
+        this.enterRule(localContext, 24, SimpleLangParser.RULE_typeAnnotation);
         let _la: number;
         try {
             this.enterOuterAlt(localContext, 1);
             {
-            this.state = 130;
+            this.state = 143;
+            _la = this.tokenStream.LA(1);
+            if(!((((_la) & ~0x1F) === 0 && ((1 << _la) & 229376) !== 0))) {
+            this.errorHandler.recoverInline(this);
+            }
+            else {
+                this.errorHandler.reportMatch(this);
+                this.consume();
+            }
+            }
+        }
+        catch (re) {
+            if (re instanceof antlr.RecognitionException) {
+                this.errorHandler.reportError(this, re);
+                this.errorHandler.recover(this, re);
+            } else {
+                throw re;
+            }
+        }
+        finally {
+            this.exitRule();
+        }
+        return localContext;
+    }
+    public functionCall(): FunctionCallContext {
+        let localContext = new FunctionCallContext(this.context, this.state);
+        this.enterRule(localContext, 26, SimpleLangParser.RULE_functionCall);
+        let _la: number;
+        try {
+            this.enterOuterAlt(localContext, 1);
+            {
+            this.state = 145;
             this.match(SimpleLangParser.IDENTIFIER);
-            this.state = 131;
+            this.state = 146;
             this.match(SimpleLangParser.T__10);
-            this.state = 133;
+            this.state = 148;
             this.errorHandler.sync(this);
             _la = this.tokenStream.LA(1);
-            if (((((_la - 11)) & ~0x1F) === 0 && ((1 << (_la - 11)) & 32702465) !== 0)) {
+            if (((((_la - 11)) & ~0x1F) === 0 && ((1 << (_la - 11)) & 1046478849) !== 0)) {
                 {
-                this.state = 132;
+                this.state = 147;
                 this.argumentList();
                 }
             }
 
-            this.state = 135;
+            this.state = 150;
             this.match(SimpleLangParser.T__11);
             }
         }
@@ -580,26 +657,26 @@ export class SimpleLangParser extends antlr.Parser {
     }
     public argumentList(): ArgumentListContext {
         let localContext = new ArgumentListContext(this.context, this.state);
-        this.enterRule(localContext, 24, SimpleLangParser.RULE_argumentList);
+        this.enterRule(localContext, 28, SimpleLangParser.RULE_argumentList);
         let _la: number;
         try {
             this.enterOuterAlt(localContext, 1);
             {
-            this.state = 137;
+            this.state = 152;
             this.expression();
-            this.state = 142;
+            this.state = 157;
             this.errorHandler.sync(this);
             _la = this.tokenStream.LA(1);
             while (_la === 13) {
                 {
                 {
-                this.state = 138;
+                this.state = 153;
                 this.match(SimpleLangParser.T__12);
-                this.state = 139;
+                this.state = 154;
                 this.expression();
                 }
                 }
-                this.state = 144;
+                this.state = 159;
                 this.errorHandler.sync(this);
                 _la = this.tokenStream.LA(1);
             }
@@ -620,25 +697,50 @@ export class SimpleLangParser extends antlr.Parser {
     }
     public returnStatement(): ReturnStatementContext {
         let localContext = new ReturnStatementContext(this.context, this.state);
-        this.enterRule(localContext, 26, SimpleLangParser.RULE_returnStatement);
+        this.enterRule(localContext, 30, SimpleLangParser.RULE_returnStatement);
         let _la: number;
         try {
             this.enterOuterAlt(localContext, 1);
             {
-            this.state = 145;
-            this.match(SimpleLangParser.T__13);
-            this.state = 147;
+            this.state = 160;
+            this.match(SimpleLangParser.T__17);
+            this.state = 162;
             this.errorHandler.sync(this);
             _la = this.tokenStream.LA(1);
-            if (((((_la - 11)) & ~0x1F) === 0 && ((1 << (_la - 11)) & 32702465) !== 0)) {
+            if (((((_la - 11)) & ~0x1F) === 0 && ((1 << (_la - 11)) & 1046478849) !== 0)) {
                 {
-                this.state = 146;
+                this.state = 161;
                 this.expression();
                 }
             }
 
-            this.state = 149;
+            this.state = 164;
             this.match(SimpleLangParser.T__0);
+            }
+        }
+        catch (re) {
+            if (re instanceof antlr.RecognitionException) {
+                this.errorHandler.reportError(this, re);
+                this.errorHandler.recover(this, re);
+            } else {
+                throw re;
+            }
+        }
+        finally {
+            this.exitRule();
+        }
+        return localContext;
+    }
+    public returnType(): ReturnTypeContext {
+        let localContext = new ReturnTypeContext(this.context, this.state);
+        this.enterRule(localContext, 32, SimpleLangParser.RULE_returnType);
+        try {
+            this.enterOuterAlt(localContext, 1);
+            {
+            this.state = 166;
+            this.match(SimpleLangParser.T__18);
+            this.state = 167;
+            this.typeAnnotation();
             }
         }
         catch (re) {
@@ -656,28 +758,28 @@ export class SimpleLangParser extends antlr.Parser {
     }
     public letDeclaration(): LetDeclarationContext {
         let localContext = new LetDeclarationContext(this.context, this.state);
-        this.enterRule(localContext, 28, SimpleLangParser.RULE_letDeclaration);
+        this.enterRule(localContext, 34, SimpleLangParser.RULE_letDeclaration);
         let _la: number;
         try {
             this.enterOuterAlt(localContext, 1);
             {
-            this.state = 151;
-            this.match(SimpleLangParser.T__14);
-            this.state = 153;
+            this.state = 169;
+            this.match(SimpleLangParser.T__19);
+            this.state = 171;
             this.errorHandler.sync(this);
             _la = this.tokenStream.LA(1);
-            if (_la === 17) {
+            if (_la === 22) {
                 {
-                this.state = 152;
+                this.state = 170;
                 this.mutability();
                 }
             }
 
-            this.state = 155;
+            this.state = 173;
             this.match(SimpleLangParser.IDENTIFIER);
-            this.state = 156;
-            this.match(SimpleLangParser.T__15);
-            this.state = 157;
+            this.state = 174;
+            this.match(SimpleLangParser.T__20);
+            this.state = 175;
             this.expression();
             }
         }
@@ -696,12 +798,12 @@ export class SimpleLangParser extends antlr.Parser {
     }
     public mutability(): MutabilityContext {
         let localContext = new MutabilityContext(this.context, this.state);
-        this.enterRule(localContext, 30, SimpleLangParser.RULE_mutability);
+        this.enterRule(localContext, 36, SimpleLangParser.RULE_mutability);
         try {
             this.enterOuterAlt(localContext, 1);
             {
-            this.state = 159;
-            this.match(SimpleLangParser.T__16);
+            this.state = 177;
+            this.match(SimpleLangParser.T__21);
             }
         }
         catch (re) {
@@ -719,30 +821,30 @@ export class SimpleLangParser extends antlr.Parser {
     }
     public assignment(): AssignmentContext {
         let localContext = new AssignmentContext(this.context, this.state);
-        this.enterRule(localContext, 32, SimpleLangParser.RULE_assignment);
+        this.enterRule(localContext, 38, SimpleLangParser.RULE_assignment);
         try {
-            this.state = 168;
+            this.state = 186;
             this.errorHandler.sync(this);
             switch (this.tokenStream.LA(1)) {
             case SimpleLangParser.IDENTIFIER:
                 this.enterOuterAlt(localContext, 1);
                 {
-                this.state = 161;
+                this.state = 179;
                 this.match(SimpleLangParser.IDENTIFIER);
-                this.state = 162;
-                this.match(SimpleLangParser.T__15);
-                this.state = 163;
+                this.state = 180;
+                this.match(SimpleLangParser.T__20);
+                this.state = 181;
                 this.expression();
                 }
                 break;
-            case SimpleLangParser.T__27:
+            case SimpleLangParser.T__32:
                 this.enterOuterAlt(localContext, 2);
                 {
-                this.state = 164;
+                this.state = 182;
                 this.derefExpression();
-                this.state = 165;
-                this.match(SimpleLangParser.T__15);
-                this.state = 166;
+                this.state = 183;
+                this.match(SimpleLangParser.T__20);
+                this.state = 184;
                 this.expression();
                 }
                 break;
@@ -765,29 +867,29 @@ export class SimpleLangParser extends antlr.Parser {
     }
     public expression(): ExpressionContext {
         let localContext = new ExpressionContext(this.context, this.state);
-        this.enterRule(localContext, 34, SimpleLangParser.RULE_expression);
+        this.enterRule(localContext, 40, SimpleLangParser.RULE_expression);
         try {
-            this.state = 173;
+            this.state = 191;
             this.errorHandler.sync(this);
-            switch (this.interpreter.adaptivePredict(this.tokenStream, 10, this.context) ) {
+            switch (this.interpreter.adaptivePredict(this.tokenStream, 11, this.context) ) {
             case 1:
                 this.enterOuterAlt(localContext, 1);
                 {
-                this.state = 170;
+                this.state = 188;
                 this.derefExpression();
                 }
                 break;
             case 2:
                 this.enterOuterAlt(localContext, 2);
                 {
-                this.state = 171;
+                this.state = 189;
                 this.borrowExpression();
                 }
                 break;
             case 3:
                 this.enterOuterAlt(localContext, 3);
                 {
-                this.state = 172;
+                this.state = 190;
                 this.logicalOrExpr();
                 }
                 break;
@@ -808,26 +910,26 @@ export class SimpleLangParser extends antlr.Parser {
     }
     public logicalOrExpr(): LogicalOrExprContext {
         let localContext = new LogicalOrExprContext(this.context, this.state);
-        this.enterRule(localContext, 36, SimpleLangParser.RULE_logicalOrExpr);
+        this.enterRule(localContext, 42, SimpleLangParser.RULE_logicalOrExpr);
         let _la: number;
         try {
             this.enterOuterAlt(localContext, 1);
             {
-            this.state = 175;
+            this.state = 193;
             this.logicalAndExpr();
-            this.state = 180;
+            this.state = 198;
             this.errorHandler.sync(this);
             _la = this.tokenStream.LA(1);
-            while (_la === 18) {
+            while (_la === 23) {
                 {
                 {
-                this.state = 176;
-                this.match(SimpleLangParser.T__17);
-                this.state = 177;
+                this.state = 194;
+                this.match(SimpleLangParser.T__22);
+                this.state = 195;
                 this.logicalAndExpr();
                 }
                 }
-                this.state = 182;
+                this.state = 200;
                 this.errorHandler.sync(this);
                 _la = this.tokenStream.LA(1);
             }
@@ -848,26 +950,26 @@ export class SimpleLangParser extends antlr.Parser {
     }
     public logicalAndExpr(): LogicalAndExprContext {
         let localContext = new LogicalAndExprContext(this.context, this.state);
-        this.enterRule(localContext, 38, SimpleLangParser.RULE_logicalAndExpr);
+        this.enterRule(localContext, 44, SimpleLangParser.RULE_logicalAndExpr);
         let _la: number;
         try {
             this.enterOuterAlt(localContext, 1);
             {
-            this.state = 183;
+            this.state = 201;
             this.equalityExpr();
-            this.state = 188;
+            this.state = 206;
             this.errorHandler.sync(this);
             _la = this.tokenStream.LA(1);
-            while (_la === 19) {
+            while (_la === 24) {
                 {
                 {
-                this.state = 184;
-                this.match(SimpleLangParser.T__18);
-                this.state = 185;
+                this.state = 202;
+                this.match(SimpleLangParser.T__23);
+                this.state = 203;
                 this.equalityExpr();
                 }
                 }
-                this.state = 190;
+                this.state = 208;
                 this.errorHandler.sync(this);
                 _la = this.tokenStream.LA(1);
             }
@@ -888,33 +990,33 @@ export class SimpleLangParser extends antlr.Parser {
     }
     public equalityExpr(): EqualityExprContext {
         let localContext = new EqualityExprContext(this.context, this.state);
-        this.enterRule(localContext, 40, SimpleLangParser.RULE_equalityExpr);
+        this.enterRule(localContext, 46, SimpleLangParser.RULE_equalityExpr);
         let _la: number;
         try {
             this.enterOuterAlt(localContext, 1);
             {
-            this.state = 191;
+            this.state = 209;
             this.relationalExpr();
-            this.state = 196;
+            this.state = 214;
             this.errorHandler.sync(this);
             _la = this.tokenStream.LA(1);
-            while (_la === 20 || _la === 21) {
+            while (_la === 25 || _la === 26) {
                 {
                 {
-                this.state = 192;
+                this.state = 210;
                 _la = this.tokenStream.LA(1);
-                if(!(_la === 20 || _la === 21)) {
+                if(!(_la === 25 || _la === 26)) {
                 this.errorHandler.recoverInline(this);
                 }
                 else {
                     this.errorHandler.reportMatch(this);
                     this.consume();
                 }
-                this.state = 193;
+                this.state = 211;
                 this.relationalExpr();
                 }
                 }
-                this.state = 198;
+                this.state = 216;
                 this.errorHandler.sync(this);
                 _la = this.tokenStream.LA(1);
             }
@@ -935,33 +1037,33 @@ export class SimpleLangParser extends antlr.Parser {
     }
     public relationalExpr(): RelationalExprContext {
         let localContext = new RelationalExprContext(this.context, this.state);
-        this.enterRule(localContext, 42, SimpleLangParser.RULE_relationalExpr);
+        this.enterRule(localContext, 48, SimpleLangParser.RULE_relationalExpr);
         let _la: number;
         try {
             this.enterOuterAlt(localContext, 1);
             {
-            this.state = 199;
+            this.state = 217;
             this.additiveExpr();
-            this.state = 204;
+            this.state = 222;
             this.errorHandler.sync(this);
             _la = this.tokenStream.LA(1);
-            while ((((_la) & ~0x1F) === 0 && ((1 << _la) & 62914560) !== 0)) {
+            while ((((_la) & ~0x1F) === 0 && ((1 << _la) & 2013265920) !== 0)) {
                 {
                 {
-                this.state = 200;
+                this.state = 218;
                 _la = this.tokenStream.LA(1);
-                if(!((((_la) & ~0x1F) === 0 && ((1 << _la) & 62914560) !== 0))) {
+                if(!((((_la) & ~0x1F) === 0 && ((1 << _la) & 2013265920) !== 0))) {
                 this.errorHandler.recoverInline(this);
                 }
                 else {
                     this.errorHandler.reportMatch(this);
                     this.consume();
                 }
-                this.state = 201;
+                this.state = 219;
                 this.additiveExpr();
                 }
                 }
-                this.state = 206;
+                this.state = 224;
                 this.errorHandler.sync(this);
                 _la = this.tokenStream.LA(1);
             }
@@ -982,33 +1084,33 @@ export class SimpleLangParser extends antlr.Parser {
     }
     public additiveExpr(): AdditiveExprContext {
         let localContext = new AdditiveExprContext(this.context, this.state);
-        this.enterRule(localContext, 44, SimpleLangParser.RULE_additiveExpr);
+        this.enterRule(localContext, 50, SimpleLangParser.RULE_additiveExpr);
         let _la: number;
         try {
             this.enterOuterAlt(localContext, 1);
             {
-            this.state = 207;
+            this.state = 225;
             this.multiplicativeExpr();
-            this.state = 212;
+            this.state = 230;
             this.errorHandler.sync(this);
             _la = this.tokenStream.LA(1);
-            while (_la === 26 || _la === 27) {
+            while (_la === 31 || _la === 32) {
                 {
                 {
-                this.state = 208;
+                this.state = 226;
                 _la = this.tokenStream.LA(1);
-                if(!(_la === 26 || _la === 27)) {
+                if(!(_la === 31 || _la === 32)) {
                 this.errorHandler.recoverInline(this);
                 }
                 else {
                     this.errorHandler.reportMatch(this);
                     this.consume();
                 }
-                this.state = 209;
+                this.state = 227;
                 this.multiplicativeExpr();
                 }
                 }
-                this.state = 214;
+                this.state = 232;
                 this.errorHandler.sync(this);
                 _la = this.tokenStream.LA(1);
             }
@@ -1029,33 +1131,33 @@ export class SimpleLangParser extends antlr.Parser {
     }
     public multiplicativeExpr(): MultiplicativeExprContext {
         let localContext = new MultiplicativeExprContext(this.context, this.state);
-        this.enterRule(localContext, 46, SimpleLangParser.RULE_multiplicativeExpr);
+        this.enterRule(localContext, 52, SimpleLangParser.RULE_multiplicativeExpr);
         let _la: number;
         try {
             this.enterOuterAlt(localContext, 1);
             {
-            this.state = 215;
+            this.state = 233;
             this.unaryExpr();
-            this.state = 220;
+            this.state = 238;
             this.errorHandler.sync(this);
             _la = this.tokenStream.LA(1);
-            while ((((_la) & ~0x1F) === 0 && ((1 << _la) & 1879048192) !== 0)) {
+            while (((((_la - 33)) & ~0x1F) === 0 && ((1 << (_la - 33)) & 7) !== 0)) {
                 {
                 {
-                this.state = 216;
+                this.state = 234;
                 _la = this.tokenStream.LA(1);
-                if(!((((_la) & ~0x1F) === 0 && ((1 << _la) & 1879048192) !== 0))) {
+                if(!(((((_la - 33)) & ~0x1F) === 0 && ((1 << (_la - 33)) & 7) !== 0))) {
                 this.errorHandler.recoverInline(this);
                 }
                 else {
                     this.errorHandler.reportMatch(this);
                     this.consume();
                 }
-                this.state = 217;
+                this.state = 235;
                 this.unaryExpr();
                 }
                 }
-                this.state = 222;
+                this.state = 240;
                 this.errorHandler.sync(this);
                 _la = this.tokenStream.LA(1);
             }
@@ -1076,40 +1178,40 @@ export class SimpleLangParser extends antlr.Parser {
     }
     public unaryExpr(): UnaryExprContext {
         let localContext = new UnaryExprContext(this.context, this.state);
-        this.enterRule(localContext, 48, SimpleLangParser.RULE_unaryExpr);
+        this.enterRule(localContext, 54, SimpleLangParser.RULE_unaryExpr);
         let _la: number;
         try {
-            this.state = 228;
+            this.state = 246;
             this.errorHandler.sync(this);
             switch (this.tokenStream.LA(1)) {
-            case SimpleLangParser.T__26:
-            case SimpleLangParser.T__30:
+            case SimpleLangParser.T__31:
+            case SimpleLangParser.T__35:
                 this.enterOuterAlt(localContext, 1);
                 {
-                this.state = 223;
+                this.state = 241;
                 _la = this.tokenStream.LA(1);
-                if(!(_la === 27 || _la === 31)) {
+                if(!(_la === 32 || _la === 36)) {
                 this.errorHandler.recoverInline(this);
                 }
                 else {
                     this.errorHandler.reportMatch(this);
                     this.consume();
                 }
-                this.state = 224;
+                this.state = 242;
                 this.unaryExpr();
                 }
                 break;
-            case SimpleLangParser.T__27:
+            case SimpleLangParser.T__32:
                 this.enterOuterAlt(localContext, 2);
                 {
-                this.state = 225;
+                this.state = 243;
                 this.derefExpression();
                 }
                 break;
-            case SimpleLangParser.T__31:
+            case SimpleLangParser.T__36:
                 this.enterOuterAlt(localContext, 3);
                 {
-                this.state = 226;
+                this.state = 244;
                 this.borrowExpression();
                 }
                 break;
@@ -1119,7 +1221,7 @@ export class SimpleLangParser extends antlr.Parser {
             case SimpleLangParser.IDENTIFIER:
                 this.enterOuterAlt(localContext, 4);
                 {
-                this.state = 227;
+                this.state = 245;
                 this.primaryExpr();
                 }
                 break;
@@ -1142,24 +1244,24 @@ export class SimpleLangParser extends antlr.Parser {
     }
     public borrowExpression(): BorrowExpressionContext {
         let localContext = new BorrowExpressionContext(this.context, this.state);
-        this.enterRule(localContext, 50, SimpleLangParser.RULE_borrowExpression);
+        this.enterRule(localContext, 56, SimpleLangParser.RULE_borrowExpression);
         let _la: number;
         try {
             this.enterOuterAlt(localContext, 1);
             {
-            this.state = 230;
-            this.match(SimpleLangParser.T__31);
-            this.state = 232;
+            this.state = 248;
+            this.match(SimpleLangParser.T__36);
+            this.state = 250;
             this.errorHandler.sync(this);
             _la = this.tokenStream.LA(1);
-            if (_la === 17) {
+            if (_la === 22) {
                 {
-                this.state = 231;
-                localContext._mutKeyword = this.match(SimpleLangParser.T__16);
+                this.state = 249;
+                localContext._mutKeyword = this.match(SimpleLangParser.T__21);
                 }
             }
 
-            this.state = 234;
+            this.state = 252;
             localContext._target = this.match(SimpleLangParser.IDENTIFIER);
             }
         }
@@ -1178,13 +1280,13 @@ export class SimpleLangParser extends antlr.Parser {
     }
     public derefExpression(): DerefExpressionContext {
         let localContext = new DerefExpressionContext(this.context, this.state);
-        this.enterRule(localContext, 52, SimpleLangParser.RULE_derefExpression);
+        this.enterRule(localContext, 58, SimpleLangParser.RULE_derefExpression);
         try {
             this.enterOuterAlt(localContext, 1);
             {
-            this.state = 236;
-            this.match(SimpleLangParser.T__27);
-            this.state = 237;
+            this.state = 254;
+            this.match(SimpleLangParser.T__32);
+            this.state = 255;
             localContext._target = this.match(SimpleLangParser.IDENTIFIER);
             }
         }
@@ -1203,40 +1305,40 @@ export class SimpleLangParser extends antlr.Parser {
     }
     public primaryExpr(): PrimaryExprContext {
         let localContext = new PrimaryExprContext(this.context, this.state);
-        this.enterRule(localContext, 54, SimpleLangParser.RULE_primaryExpr);
+        this.enterRule(localContext, 60, SimpleLangParser.RULE_primaryExpr);
         try {
-            this.state = 246;
+            this.state = 264;
             this.errorHandler.sync(this);
-            switch (this.interpreter.adaptivePredict(this.tokenStream, 19, this.context) ) {
+            switch (this.interpreter.adaptivePredict(this.tokenStream, 20, this.context) ) {
             case 1:
                 this.enterOuterAlt(localContext, 1);
                 {
-                this.state = 239;
+                this.state = 257;
                 this.literal();
                 }
                 break;
             case 2:
                 this.enterOuterAlt(localContext, 2);
                 {
-                this.state = 240;
+                this.state = 258;
                 this.match(SimpleLangParser.IDENTIFIER);
                 }
                 break;
             case 3:
                 this.enterOuterAlt(localContext, 3);
                 {
-                this.state = 241;
+                this.state = 259;
                 this.match(SimpleLangParser.T__10);
-                this.state = 242;
+                this.state = 260;
                 this.expression();
-                this.state = 243;
+                this.state = 261;
                 this.match(SimpleLangParser.T__11);
                 }
                 break;
             case 4:
                 this.enterOuterAlt(localContext, 4);
                 {
-                this.state = 245;
+                this.state = 263;
                 this.functionCall();
                 }
                 break;
@@ -1257,14 +1359,14 @@ export class SimpleLangParser extends antlr.Parser {
     }
     public literal(): LiteralContext {
         let localContext = new LiteralContext(this.context, this.state);
-        this.enterRule(localContext, 56, SimpleLangParser.RULE_literal);
+        this.enterRule(localContext, 62, SimpleLangParser.RULE_literal);
         let _la: number;
         try {
             this.enterOuterAlt(localContext, 1);
             {
-            this.state = 248;
+            this.state = 266;
             _la = this.tokenStream.LA(1);
-            if(!(_la === 33 || _la === 34)) {
+            if(!(_la === 38 || _la === 39)) {
             this.errorHandler.recoverInline(this);
             }
             else {
@@ -1288,92 +1390,98 @@ export class SimpleLangParser extends antlr.Parser {
     }
 
     public static readonly _serializedATN: number[] = [
-        4,1,36,251,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,
+        4,1,41,269,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,
         6,2,7,7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,
         2,14,7,14,2,15,7,15,2,16,7,16,2,17,7,17,2,18,7,18,2,19,7,19,2,20,
         7,20,2,21,7,21,2,22,7,22,2,23,7,23,2,24,7,24,2,25,7,25,2,26,7,26,
-        2,27,7,27,2,28,7,28,1,0,1,0,1,0,1,1,4,1,63,8,1,11,1,12,1,64,1,2,
-        1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,
-        1,2,1,2,1,2,1,2,3,2,88,8,2,1,3,1,3,1,3,1,3,1,4,1,4,1,4,1,4,1,4,1,
-        4,1,4,3,4,101,8,4,1,5,1,5,1,5,1,5,1,6,1,6,1,6,1,7,1,7,1,8,1,8,1,
-        9,1,9,1,9,1,9,3,9,118,8,9,1,9,1,9,1,9,1,10,1,10,1,10,5,10,126,8,
-        10,10,10,12,10,129,9,10,1,11,1,11,1,11,3,11,134,8,11,1,11,1,11,1,
-        12,1,12,1,12,5,12,141,8,12,10,12,12,12,144,9,12,1,13,1,13,3,13,148,
-        8,13,1,13,1,13,1,14,1,14,3,14,154,8,14,1,14,1,14,1,14,1,14,1,15,
-        1,15,1,16,1,16,1,16,1,16,1,16,1,16,1,16,3,16,169,8,16,1,17,1,17,
-        1,17,3,17,174,8,17,1,18,1,18,1,18,5,18,179,8,18,10,18,12,18,182,
-        9,18,1,19,1,19,1,19,5,19,187,8,19,10,19,12,19,190,9,19,1,20,1,20,
-        1,20,5,20,195,8,20,10,20,12,20,198,9,20,1,21,1,21,1,21,5,21,203,
-        8,21,10,21,12,21,206,9,21,1,22,1,22,1,22,5,22,211,8,22,10,22,12,
-        22,214,9,22,1,23,1,23,1,23,5,23,219,8,23,10,23,12,23,222,9,23,1,
-        24,1,24,1,24,1,24,1,24,3,24,229,8,24,1,25,1,25,3,25,233,8,25,1,25,
-        1,25,1,26,1,26,1,26,1,27,1,27,1,27,1,27,1,27,1,27,1,27,3,27,247,
-        8,27,1,28,1,28,1,28,0,0,29,0,2,4,6,8,10,12,14,16,18,20,22,24,26,
-        28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,0,6,1,0,20,21,1,0,22,
-        25,1,0,26,27,1,0,28,30,2,0,27,27,31,31,1,0,33,34,256,0,58,1,0,0,
-        0,2,62,1,0,0,0,4,87,1,0,0,0,6,89,1,0,0,0,8,93,1,0,0,0,10,102,1,0,
-        0,0,12,106,1,0,0,0,14,109,1,0,0,0,16,111,1,0,0,0,18,113,1,0,0,0,
-        20,122,1,0,0,0,22,130,1,0,0,0,24,137,1,0,0,0,26,145,1,0,0,0,28,151,
-        1,0,0,0,30,159,1,0,0,0,32,168,1,0,0,0,34,173,1,0,0,0,36,175,1,0,
-        0,0,38,183,1,0,0,0,40,191,1,0,0,0,42,199,1,0,0,0,44,207,1,0,0,0,
-        46,215,1,0,0,0,48,228,1,0,0,0,50,230,1,0,0,0,52,236,1,0,0,0,54,246,
-        1,0,0,0,56,248,1,0,0,0,58,59,3,2,1,0,59,60,5,0,0,1,60,1,1,0,0,0,
-        61,63,3,4,2,0,62,61,1,0,0,0,63,64,1,0,0,0,64,62,1,0,0,0,64,65,1,
-        0,0,0,65,3,1,0,0,0,66,67,3,28,14,0,67,68,5,1,0,0,68,88,1,0,0,0,69,
-        70,3,32,16,0,70,71,5,1,0,0,71,88,1,0,0,0,72,73,3,34,17,0,73,74,5,
-        1,0,0,74,88,1,0,0,0,75,88,3,6,3,0,76,88,3,8,4,0,77,88,3,10,5,0,78,
-        88,3,12,6,0,79,80,3,14,7,0,80,81,5,1,0,0,81,88,1,0,0,0,82,83,3,16,
-        8,0,83,84,5,1,0,0,84,88,1,0,0,0,85,88,3,18,9,0,86,88,3,26,13,0,87,
-        66,1,0,0,0,87,69,1,0,0,0,87,72,1,0,0,0,87,75,1,0,0,0,87,76,1,0,0,
-        0,87,77,1,0,0,0,87,78,1,0,0,0,87,79,1,0,0,0,87,82,1,0,0,0,87,85,
-        1,0,0,0,87,86,1,0,0,0,88,5,1,0,0,0,89,90,5,2,0,0,90,91,3,2,1,0,91,
-        92,5,3,0,0,92,7,1,0,0,0,93,94,5,4,0,0,94,95,3,34,17,0,95,100,3,6,
-        3,0,96,97,5,5,0,0,97,101,3,8,4,0,98,99,5,5,0,0,99,101,3,6,3,0,100,
-        96,1,0,0,0,100,98,1,0,0,0,100,101,1,0,0,0,101,9,1,0,0,0,102,103,
-        5,6,0,0,103,104,3,34,17,0,104,105,3,6,3,0,105,11,1,0,0,0,106,107,
-        5,7,0,0,107,108,3,6,3,0,108,13,1,0,0,0,109,110,5,8,0,0,110,15,1,
-        0,0,0,111,112,5,9,0,0,112,17,1,0,0,0,113,114,5,10,0,0,114,115,5,
-        35,0,0,115,117,5,11,0,0,116,118,3,20,10,0,117,116,1,0,0,0,117,118,
-        1,0,0,0,118,119,1,0,0,0,119,120,5,12,0,0,120,121,3,6,3,0,121,19,
-        1,0,0,0,122,127,5,35,0,0,123,124,5,13,0,0,124,126,5,35,0,0,125,123,
-        1,0,0,0,126,129,1,0,0,0,127,125,1,0,0,0,127,128,1,0,0,0,128,21,1,
-        0,0,0,129,127,1,0,0,0,130,131,5,35,0,0,131,133,5,11,0,0,132,134,
-        3,24,12,0,133,132,1,0,0,0,133,134,1,0,0,0,134,135,1,0,0,0,135,136,
-        5,12,0,0,136,23,1,0,0,0,137,142,3,34,17,0,138,139,5,13,0,0,139,141,
-        3,34,17,0,140,138,1,0,0,0,141,144,1,0,0,0,142,140,1,0,0,0,142,143,
-        1,0,0,0,143,25,1,0,0,0,144,142,1,0,0,0,145,147,5,14,0,0,146,148,
-        3,34,17,0,147,146,1,0,0,0,147,148,1,0,0,0,148,149,1,0,0,0,149,150,
-        5,1,0,0,150,27,1,0,0,0,151,153,5,15,0,0,152,154,3,30,15,0,153,152,
-        1,0,0,0,153,154,1,0,0,0,154,155,1,0,0,0,155,156,5,35,0,0,156,157,
-        5,16,0,0,157,158,3,34,17,0,158,29,1,0,0,0,159,160,5,17,0,0,160,31,
-        1,0,0,0,161,162,5,35,0,0,162,163,5,16,0,0,163,169,3,34,17,0,164,
-        165,3,52,26,0,165,166,5,16,0,0,166,167,3,34,17,0,167,169,1,0,0,0,
-        168,161,1,0,0,0,168,164,1,0,0,0,169,33,1,0,0,0,170,174,3,52,26,0,
-        171,174,3,50,25,0,172,174,3,36,18,0,173,170,1,0,0,0,173,171,1,0,
-        0,0,173,172,1,0,0,0,174,35,1,0,0,0,175,180,3,38,19,0,176,177,5,18,
-        0,0,177,179,3,38,19,0,178,176,1,0,0,0,179,182,1,0,0,0,180,178,1,
-        0,0,0,180,181,1,0,0,0,181,37,1,0,0,0,182,180,1,0,0,0,183,188,3,40,
-        20,0,184,185,5,19,0,0,185,187,3,40,20,0,186,184,1,0,0,0,187,190,
-        1,0,0,0,188,186,1,0,0,0,188,189,1,0,0,0,189,39,1,0,0,0,190,188,1,
-        0,0,0,191,196,3,42,21,0,192,193,7,0,0,0,193,195,3,42,21,0,194,192,
-        1,0,0,0,195,198,1,0,0,0,196,194,1,0,0,0,196,197,1,0,0,0,197,41,1,
-        0,0,0,198,196,1,0,0,0,199,204,3,44,22,0,200,201,7,1,0,0,201,203,
-        3,44,22,0,202,200,1,0,0,0,203,206,1,0,0,0,204,202,1,0,0,0,204,205,
-        1,0,0,0,205,43,1,0,0,0,206,204,1,0,0,0,207,212,3,46,23,0,208,209,
-        7,2,0,0,209,211,3,46,23,0,210,208,1,0,0,0,211,214,1,0,0,0,212,210,
-        1,0,0,0,212,213,1,0,0,0,213,45,1,0,0,0,214,212,1,0,0,0,215,220,3,
-        48,24,0,216,217,7,3,0,0,217,219,3,48,24,0,218,216,1,0,0,0,219,222,
-        1,0,0,0,220,218,1,0,0,0,220,221,1,0,0,0,221,47,1,0,0,0,222,220,1,
-        0,0,0,223,224,7,4,0,0,224,229,3,48,24,0,225,229,3,52,26,0,226,229,
-        3,50,25,0,227,229,3,54,27,0,228,223,1,0,0,0,228,225,1,0,0,0,228,
-        226,1,0,0,0,228,227,1,0,0,0,229,49,1,0,0,0,230,232,5,32,0,0,231,
-        233,5,17,0,0,232,231,1,0,0,0,232,233,1,0,0,0,233,234,1,0,0,0,234,
-        235,5,35,0,0,235,51,1,0,0,0,236,237,5,28,0,0,237,238,5,35,0,0,238,
-        53,1,0,0,0,239,247,3,56,28,0,240,247,5,35,0,0,241,242,5,11,0,0,242,
-        243,3,34,17,0,243,244,5,12,0,0,244,247,1,0,0,0,245,247,3,22,11,0,
-        246,239,1,0,0,0,246,240,1,0,0,0,246,241,1,0,0,0,246,245,1,0,0,0,
-        247,55,1,0,0,0,248,249,7,5,0,0,249,57,1,0,0,0,20,64,87,100,117,127,
-        133,142,147,153,168,173,180,188,196,204,212,220,228,232,246
+        2,27,7,27,2,28,7,28,2,29,7,29,2,30,7,30,2,31,7,31,1,0,1,0,1,0,1,
+        1,4,1,69,8,1,11,1,12,1,70,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,
+        2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,1,2,3,2,94,8,2,1,3,1,3,
+        1,3,1,3,1,4,1,4,1,4,1,4,1,4,1,4,1,4,3,4,107,8,4,1,5,1,5,1,5,1,5,
+        1,6,1,6,1,6,1,7,1,7,1,8,1,8,1,9,1,9,1,9,1,9,3,9,124,8,9,1,9,1,9,
+        3,9,128,8,9,1,9,1,9,1,10,1,10,1,10,5,10,135,8,10,10,10,12,10,138,
+        9,10,1,11,1,11,1,11,1,11,1,12,1,12,1,13,1,13,1,13,3,13,149,8,13,
+        1,13,1,13,1,14,1,14,1,14,5,14,156,8,14,10,14,12,14,159,9,14,1,15,
+        1,15,3,15,163,8,15,1,15,1,15,1,16,1,16,1,16,1,17,1,17,3,17,172,8,
+        17,1,17,1,17,1,17,1,17,1,18,1,18,1,19,1,19,1,19,1,19,1,19,1,19,1,
+        19,3,19,187,8,19,1,20,1,20,1,20,3,20,192,8,20,1,21,1,21,1,21,5,21,
+        197,8,21,10,21,12,21,200,9,21,1,22,1,22,1,22,5,22,205,8,22,10,22,
+        12,22,208,9,22,1,23,1,23,1,23,5,23,213,8,23,10,23,12,23,216,9,23,
+        1,24,1,24,1,24,5,24,221,8,24,10,24,12,24,224,9,24,1,25,1,25,1,25,
+        5,25,229,8,25,10,25,12,25,232,9,25,1,26,1,26,1,26,5,26,237,8,26,
+        10,26,12,26,240,9,26,1,27,1,27,1,27,1,27,1,27,3,27,247,8,27,1,28,
+        1,28,3,28,251,8,28,1,28,1,28,1,29,1,29,1,29,1,30,1,30,1,30,1,30,
+        1,30,1,30,1,30,3,30,265,8,30,1,31,1,31,1,31,0,0,32,0,2,4,6,8,10,
+        12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,
+        56,58,60,62,0,7,1,0,15,17,1,0,25,26,1,0,27,30,1,0,31,32,1,0,33,35,
+        2,0,32,32,36,36,1,0,38,39,272,0,64,1,0,0,0,2,68,1,0,0,0,4,93,1,0,
+        0,0,6,95,1,0,0,0,8,99,1,0,0,0,10,108,1,0,0,0,12,112,1,0,0,0,14,115,
+        1,0,0,0,16,117,1,0,0,0,18,119,1,0,0,0,20,131,1,0,0,0,22,139,1,0,
+        0,0,24,143,1,0,0,0,26,145,1,0,0,0,28,152,1,0,0,0,30,160,1,0,0,0,
+        32,166,1,0,0,0,34,169,1,0,0,0,36,177,1,0,0,0,38,186,1,0,0,0,40,191,
+        1,0,0,0,42,193,1,0,0,0,44,201,1,0,0,0,46,209,1,0,0,0,48,217,1,0,
+        0,0,50,225,1,0,0,0,52,233,1,0,0,0,54,246,1,0,0,0,56,248,1,0,0,0,
+        58,254,1,0,0,0,60,264,1,0,0,0,62,266,1,0,0,0,64,65,3,2,1,0,65,66,
+        5,0,0,1,66,1,1,0,0,0,67,69,3,4,2,0,68,67,1,0,0,0,69,70,1,0,0,0,70,
+        68,1,0,0,0,70,71,1,0,0,0,71,3,1,0,0,0,72,73,3,34,17,0,73,74,5,1,
+        0,0,74,94,1,0,0,0,75,76,3,38,19,0,76,77,5,1,0,0,77,94,1,0,0,0,78,
+        79,3,40,20,0,79,80,5,1,0,0,80,94,1,0,0,0,81,94,3,6,3,0,82,94,3,8,
+        4,0,83,94,3,10,5,0,84,94,3,12,6,0,85,86,3,14,7,0,86,87,5,1,0,0,87,
+        94,1,0,0,0,88,89,3,16,8,0,89,90,5,1,0,0,90,94,1,0,0,0,91,94,3,18,
+        9,0,92,94,3,30,15,0,93,72,1,0,0,0,93,75,1,0,0,0,93,78,1,0,0,0,93,
+        81,1,0,0,0,93,82,1,0,0,0,93,83,1,0,0,0,93,84,1,0,0,0,93,85,1,0,0,
+        0,93,88,1,0,0,0,93,91,1,0,0,0,93,92,1,0,0,0,94,5,1,0,0,0,95,96,5,
+        2,0,0,96,97,3,2,1,0,97,98,5,3,0,0,98,7,1,0,0,0,99,100,5,4,0,0,100,
+        101,3,40,20,0,101,106,3,6,3,0,102,103,5,5,0,0,103,107,3,8,4,0,104,
+        105,5,5,0,0,105,107,3,6,3,0,106,102,1,0,0,0,106,104,1,0,0,0,106,
+        107,1,0,0,0,107,9,1,0,0,0,108,109,5,6,0,0,109,110,3,40,20,0,110,
+        111,3,6,3,0,111,11,1,0,0,0,112,113,5,7,0,0,113,114,3,6,3,0,114,13,
+        1,0,0,0,115,116,5,8,0,0,116,15,1,0,0,0,117,118,5,9,0,0,118,17,1,
+        0,0,0,119,120,5,10,0,0,120,121,5,40,0,0,121,123,5,11,0,0,122,124,
+        3,20,10,0,123,122,1,0,0,0,123,124,1,0,0,0,124,125,1,0,0,0,125,127,
+        5,12,0,0,126,128,3,32,16,0,127,126,1,0,0,0,127,128,1,0,0,0,128,129,
+        1,0,0,0,129,130,3,6,3,0,130,19,1,0,0,0,131,136,3,22,11,0,132,133,
+        5,13,0,0,133,135,3,22,11,0,134,132,1,0,0,0,135,138,1,0,0,0,136,134,
+        1,0,0,0,136,137,1,0,0,0,137,21,1,0,0,0,138,136,1,0,0,0,139,140,5,
+        40,0,0,140,141,5,14,0,0,141,142,3,24,12,0,142,23,1,0,0,0,143,144,
+        7,0,0,0,144,25,1,0,0,0,145,146,5,40,0,0,146,148,5,11,0,0,147,149,
+        3,28,14,0,148,147,1,0,0,0,148,149,1,0,0,0,149,150,1,0,0,0,150,151,
+        5,12,0,0,151,27,1,0,0,0,152,157,3,40,20,0,153,154,5,13,0,0,154,156,
+        3,40,20,0,155,153,1,0,0,0,156,159,1,0,0,0,157,155,1,0,0,0,157,158,
+        1,0,0,0,158,29,1,0,0,0,159,157,1,0,0,0,160,162,5,18,0,0,161,163,
+        3,40,20,0,162,161,1,0,0,0,162,163,1,0,0,0,163,164,1,0,0,0,164,165,
+        5,1,0,0,165,31,1,0,0,0,166,167,5,19,0,0,167,168,3,24,12,0,168,33,
+        1,0,0,0,169,171,5,20,0,0,170,172,3,36,18,0,171,170,1,0,0,0,171,172,
+        1,0,0,0,172,173,1,0,0,0,173,174,5,40,0,0,174,175,5,21,0,0,175,176,
+        3,40,20,0,176,35,1,0,0,0,177,178,5,22,0,0,178,37,1,0,0,0,179,180,
+        5,40,0,0,180,181,5,21,0,0,181,187,3,40,20,0,182,183,3,58,29,0,183,
+        184,5,21,0,0,184,185,3,40,20,0,185,187,1,0,0,0,186,179,1,0,0,0,186,
+        182,1,0,0,0,187,39,1,0,0,0,188,192,3,58,29,0,189,192,3,56,28,0,190,
+        192,3,42,21,0,191,188,1,0,0,0,191,189,1,0,0,0,191,190,1,0,0,0,192,
+        41,1,0,0,0,193,198,3,44,22,0,194,195,5,23,0,0,195,197,3,44,22,0,
+        196,194,1,0,0,0,197,200,1,0,0,0,198,196,1,0,0,0,198,199,1,0,0,0,
+        199,43,1,0,0,0,200,198,1,0,0,0,201,206,3,46,23,0,202,203,5,24,0,
+        0,203,205,3,46,23,0,204,202,1,0,0,0,205,208,1,0,0,0,206,204,1,0,
+        0,0,206,207,1,0,0,0,207,45,1,0,0,0,208,206,1,0,0,0,209,214,3,48,
+        24,0,210,211,7,1,0,0,211,213,3,48,24,0,212,210,1,0,0,0,213,216,1,
+        0,0,0,214,212,1,0,0,0,214,215,1,0,0,0,215,47,1,0,0,0,216,214,1,0,
+        0,0,217,222,3,50,25,0,218,219,7,2,0,0,219,221,3,50,25,0,220,218,
+        1,0,0,0,221,224,1,0,0,0,222,220,1,0,0,0,222,223,1,0,0,0,223,49,1,
+        0,0,0,224,222,1,0,0,0,225,230,3,52,26,0,226,227,7,3,0,0,227,229,
+        3,52,26,0,228,226,1,0,0,0,229,232,1,0,0,0,230,228,1,0,0,0,230,231,
+        1,0,0,0,231,51,1,0,0,0,232,230,1,0,0,0,233,238,3,54,27,0,234,235,
+        7,4,0,0,235,237,3,54,27,0,236,234,1,0,0,0,237,240,1,0,0,0,238,236,
+        1,0,0,0,238,239,1,0,0,0,239,53,1,0,0,0,240,238,1,0,0,0,241,242,7,
+        5,0,0,242,247,3,54,27,0,243,247,3,58,29,0,244,247,3,56,28,0,245,
+        247,3,60,30,0,246,241,1,0,0,0,246,243,1,0,0,0,246,244,1,0,0,0,246,
+        245,1,0,0,0,247,55,1,0,0,0,248,250,5,37,0,0,249,251,5,22,0,0,250,
+        249,1,0,0,0,250,251,1,0,0,0,251,252,1,0,0,0,252,253,5,40,0,0,253,
+        57,1,0,0,0,254,255,5,33,0,0,255,256,5,40,0,0,256,59,1,0,0,0,257,
+        265,3,62,31,0,258,265,5,40,0,0,259,260,5,11,0,0,260,261,3,40,20,
+        0,261,262,5,12,0,0,262,265,1,0,0,0,263,265,3,26,13,0,264,257,1,0,
+        0,0,264,258,1,0,0,0,264,259,1,0,0,0,264,263,1,0,0,0,265,61,1,0,0,
+        0,266,267,7,6,0,0,267,63,1,0,0,0,21,70,93,106,123,127,136,148,157,
+        162,171,186,191,198,206,214,222,230,238,246,250,264
     ];
 
     private static __ATN: antlr.ATN;
@@ -1723,8 +1831,11 @@ export class FunctionDeclarationContext extends antlr.ParserRuleContext {
     public block(): BlockContext {
         return this.getRuleContext(0, BlockContext)!;
     }
-    public parameterList(): ParameterListContext | null {
-        return this.getRuleContext(0, ParameterListContext);
+    public typedParameterList(): TypedParameterListContext | null {
+        return this.getRuleContext(0, TypedParameterListContext);
+    }
+    public returnType(): ReturnTypeContext | null {
+        return this.getRuleContext(0, ReturnTypeContext);
     }
     public override get ruleIndex(): number {
         return SimpleLangParser.RULE_functionDeclaration;
@@ -1749,35 +1860,95 @@ export class FunctionDeclarationContext extends antlr.ParserRuleContext {
 }
 
 
-export class ParameterListContext extends antlr.ParserRuleContext {
+export class TypedParameterListContext extends antlr.ParserRuleContext {
     public constructor(parent: antlr.ParserRuleContext | null, invokingState: number) {
         super(parent, invokingState);
     }
-    public IDENTIFIER(): antlr.TerminalNode[];
-    public IDENTIFIER(i: number): antlr.TerminalNode | null;
-    public IDENTIFIER(i?: number): antlr.TerminalNode | null | antlr.TerminalNode[] {
-    	if (i === undefined) {
-    		return this.getTokens(SimpleLangParser.IDENTIFIER);
-    	} else {
-    		return this.getToken(SimpleLangParser.IDENTIFIER, i);
-    	}
+    public typedParameter(): TypedParameterContext[];
+    public typedParameter(i: number): TypedParameterContext | null;
+    public typedParameter(i?: number): TypedParameterContext[] | TypedParameterContext | null {
+        if (i === undefined) {
+            return this.getRuleContexts(TypedParameterContext);
+        }
+
+        return this.getRuleContext(i, TypedParameterContext);
     }
     public override get ruleIndex(): number {
-        return SimpleLangParser.RULE_parameterList;
+        return SimpleLangParser.RULE_typedParameterList;
     }
     public override enterRule(listener: SimpleLangListener): void {
-        if(listener.enterParameterList) {
-             listener.enterParameterList(this);
+        if(listener.enterTypedParameterList) {
+             listener.enterTypedParameterList(this);
         }
     }
     public override exitRule(listener: SimpleLangListener): void {
-        if(listener.exitParameterList) {
-             listener.exitParameterList(this);
+        if(listener.exitTypedParameterList) {
+             listener.exitTypedParameterList(this);
         }
     }
     public override accept<Result>(visitor: SimpleLangVisitor<Result>): Result | null {
-        if (visitor.visitParameterList) {
-            return visitor.visitParameterList(this);
+        if (visitor.visitTypedParameterList) {
+            return visitor.visitTypedParameterList(this);
+        } else {
+            return visitor.visitChildren(this);
+        }
+    }
+}
+
+
+export class TypedParameterContext extends antlr.ParserRuleContext {
+    public constructor(parent: antlr.ParserRuleContext | null, invokingState: number) {
+        super(parent, invokingState);
+    }
+    public IDENTIFIER(): antlr.TerminalNode {
+        return this.getToken(SimpleLangParser.IDENTIFIER, 0)!;
+    }
+    public typeAnnotation(): TypeAnnotationContext {
+        return this.getRuleContext(0, TypeAnnotationContext)!;
+    }
+    public override get ruleIndex(): number {
+        return SimpleLangParser.RULE_typedParameter;
+    }
+    public override enterRule(listener: SimpleLangListener): void {
+        if(listener.enterTypedParameter) {
+             listener.enterTypedParameter(this);
+        }
+    }
+    public override exitRule(listener: SimpleLangListener): void {
+        if(listener.exitTypedParameter) {
+             listener.exitTypedParameter(this);
+        }
+    }
+    public override accept<Result>(visitor: SimpleLangVisitor<Result>): Result | null {
+        if (visitor.visitTypedParameter) {
+            return visitor.visitTypedParameter(this);
+        } else {
+            return visitor.visitChildren(this);
+        }
+    }
+}
+
+
+export class TypeAnnotationContext extends antlr.ParserRuleContext {
+    public constructor(parent: antlr.ParserRuleContext | null, invokingState: number) {
+        super(parent, invokingState);
+    }
+    public override get ruleIndex(): number {
+        return SimpleLangParser.RULE_typeAnnotation;
+    }
+    public override enterRule(listener: SimpleLangListener): void {
+        if(listener.enterTypeAnnotation) {
+             listener.enterTypeAnnotation(this);
+        }
+    }
+    public override exitRule(listener: SimpleLangListener): void {
+        if(listener.exitTypeAnnotation) {
+             listener.exitTypeAnnotation(this);
+        }
+    }
+    public override accept<Result>(visitor: SimpleLangVisitor<Result>): Result | null {
+        if (visitor.visitTypeAnnotation) {
+            return visitor.visitTypeAnnotation(this);
         } else {
             return visitor.visitChildren(this);
         }
@@ -1877,6 +2048,36 @@ export class ReturnStatementContext extends antlr.ParserRuleContext {
     public override accept<Result>(visitor: SimpleLangVisitor<Result>): Result | null {
         if (visitor.visitReturnStatement) {
             return visitor.visitReturnStatement(this);
+        } else {
+            return visitor.visitChildren(this);
+        }
+    }
+}
+
+
+export class ReturnTypeContext extends antlr.ParserRuleContext {
+    public constructor(parent: antlr.ParserRuleContext | null, invokingState: number) {
+        super(parent, invokingState);
+    }
+    public typeAnnotation(): TypeAnnotationContext {
+        return this.getRuleContext(0, TypeAnnotationContext)!;
+    }
+    public override get ruleIndex(): number {
+        return SimpleLangParser.RULE_returnType;
+    }
+    public override enterRule(listener: SimpleLangListener): void {
+        if(listener.enterReturnType) {
+             listener.enterReturnType(this);
+        }
+    }
+    public override exitRule(listener: SimpleLangListener): void {
+        if(listener.exitReturnType) {
+             listener.exitReturnType(this);
+        }
+    }
+    public override accept<Result>(visitor: SimpleLangVisitor<Result>): Result | null {
+        if (visitor.visitReturnType) {
+            return visitor.visitReturnType(this);
         } else {
             return visitor.visitChildren(this);
         }

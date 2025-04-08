@@ -13,10 +13,13 @@ import { LoopStatementContext } from "./SimpleLangParser.js";
 import { BreakStatementContext } from "./SimpleLangParser.js";
 import { ContinueStatementContext } from "./SimpleLangParser.js";
 import { FunctionDeclarationContext } from "./SimpleLangParser.js";
-import { ParameterListContext } from "./SimpleLangParser.js";
+import { TypedParameterListContext } from "./SimpleLangParser.js";
+import { TypedParameterContext } from "./SimpleLangParser.js";
+import { TypeAnnotationContext } from "./SimpleLangParser.js";
 import { FunctionCallContext } from "./SimpleLangParser.js";
 import { ArgumentListContext } from "./SimpleLangParser.js";
 import { ReturnStatementContext } from "./SimpleLangParser.js";
+import { ReturnTypeContext } from "./SimpleLangParser.js";
 import { LetDeclarationContext } from "./SimpleLangParser.js";
 import { MutabilityContext } from "./SimpleLangParser.js";
 import { AssignmentContext } from "./SimpleLangParser.js";
@@ -140,15 +143,35 @@ export class SimpleLangListener implements ParseTreeListener {
      */
     exitFunctionDeclaration?: (ctx: FunctionDeclarationContext) => void;
     /**
-     * Enter a parse tree produced by `SimpleLangParser.parameterList`.
+     * Enter a parse tree produced by `SimpleLangParser.typedParameterList`.
      * @param ctx the parse tree
      */
-    enterParameterList?: (ctx: ParameterListContext) => void;
+    enterTypedParameterList?: (ctx: TypedParameterListContext) => void;
     /**
-     * Exit a parse tree produced by `SimpleLangParser.parameterList`.
+     * Exit a parse tree produced by `SimpleLangParser.typedParameterList`.
      * @param ctx the parse tree
      */
-    exitParameterList?: (ctx: ParameterListContext) => void;
+    exitTypedParameterList?: (ctx: TypedParameterListContext) => void;
+    /**
+     * Enter a parse tree produced by `SimpleLangParser.typedParameter`.
+     * @param ctx the parse tree
+     */
+    enterTypedParameter?: (ctx: TypedParameterContext) => void;
+    /**
+     * Exit a parse tree produced by `SimpleLangParser.typedParameter`.
+     * @param ctx the parse tree
+     */
+    exitTypedParameter?: (ctx: TypedParameterContext) => void;
+    /**
+     * Enter a parse tree produced by `SimpleLangParser.typeAnnotation`.
+     * @param ctx the parse tree
+     */
+    enterTypeAnnotation?: (ctx: TypeAnnotationContext) => void;
+    /**
+     * Exit a parse tree produced by `SimpleLangParser.typeAnnotation`.
+     * @param ctx the parse tree
+     */
+    exitTypeAnnotation?: (ctx: TypeAnnotationContext) => void;
     /**
      * Enter a parse tree produced by `SimpleLangParser.functionCall`.
      * @param ctx the parse tree
@@ -179,6 +202,16 @@ export class SimpleLangListener implements ParseTreeListener {
      * @param ctx the parse tree
      */
     exitReturnStatement?: (ctx: ReturnStatementContext) => void;
+    /**
+     * Enter a parse tree produced by `SimpleLangParser.returnType`.
+     * @param ctx the parse tree
+     */
+    enterReturnType?: (ctx: ReturnTypeContext) => void;
+    /**
+     * Exit a parse tree produced by `SimpleLangParser.returnType`.
+     * @param ctx the parse tree
+     */
+    exitReturnType?: (ctx: ReturnTypeContext) => void;
     /**
      * Enter a parse tree produced by `SimpleLangParser.letDeclaration`.
      * @param ctx the parse tree

@@ -47,11 +47,21 @@ continueStatement
     ;
 
 functionDeclaration
-    : 'fn' IDENTIFIER '(' parameterList? ')' block
+    : 'fn' IDENTIFIER '(' typedParameterList? ')' returnType? block
     ;
 
-parameterList
-    : IDENTIFIER (',' IDENTIFIER)*
+typedParameterList
+    : typedParameter (',' typedParameter)*
+    ;
+
+typedParameter
+    : IDENTIFIER ':' typeAnnotation
+    ;
+
+typeAnnotation
+    : 'f64'
+    | 'bool'
+    | 'void'
     ;
 
 functionCall
@@ -64,6 +74,10 @@ argumentList
 
 returnStatement
     : 'return' expression? ';'
+    ;
+
+returnType
+    : '->' typeAnnotation
     ;
 
 letDeclaration

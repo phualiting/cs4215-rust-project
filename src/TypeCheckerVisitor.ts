@@ -1,7 +1,7 @@
 import { AbstractParseTreeVisitor } from 'antlr4ng';
 import { SimpleLangVisitor } from './parser/src/SimpleLangVisitor';
 import { AdditiveExprContext, AssignmentContext, BlockContext, BorrowExpressionContext, DerefExpressionContext, EqualityExprContext, ExpressionContext, FunctionCallContext, FunctionDeclarationContext, IfStatementContext, LetDeclarationContext, LiteralContext, LogicalAndExprContext, LogicalOrExprContext, MultiplicativeExprContext, PrimaryExprContext, RelationalExprContext, ReturnStatementContext, StatementListContext, UnaryExprContext, WhileLoopContext } from './parser/src/SimpleLangParser';
-import { Type, NumberType, BooleanType, ReferenceType, VoidType, FunctionType } from './Type';
+import { Type, NumberType, BooleanType, ReferenceType, VoidType, FunctionType, stringToType } from './Type';
 
 
 class TypeCheckerVisitor extends AbstractParseTreeVisitor<Type> implements SimpleLangVisitor<Type> {
@@ -64,11 +64,37 @@ class TypeCheckerVisitor extends AbstractParseTreeVisitor<Type> implements Simpl
     }
     
     visitFunctionDeclaration(ctx: FunctionDeclarationContext): Type {
-        const name = ctx.IDENTIFIER().getText();
-        const paramNames = ctx.parameterList()?.IDENTIFIER().map(id => id.getText()) || [];
-        const paramTypes = Array(paramNames.length).fill(NumberType.getInstance());
+        const ident = ctx.IDENTIFIER();
+        if (!ident) {
+            throw new Error("Function declaration is missing a name");
+        }
+        const name = ident.getText();
+        
+        const paramList = ctx.typedParameterList();
+        if (!paramList) {
+            throw new Error(`Function ${name} has an invalid parameter list`);
+        }
+        const paramCtxs = paramList.typedParameter();
+        const paramNames: string[] = [];
+        const paramTypes: Type[] = [];
+
+        for (const p of paramCtxs) {
+            const ident = p.IDENTIFIER?.();
+            const typeAnn = p.typeAnnotation?.();
+        
+            if (!ident || !typeAnn) {
+                throw new Error(`Missing parameter name or type annotation in function '${name}'`);
+            }
+        
+            paramNames.push(ident.getText());
+            paramTypes.push(stringToType(typeAnn.getText()));
+        }
     
-        const funcType = new FunctionType(paramTypes, VoidType.getInstance());
+        const returnType = ctx.returnType()
+            ? stringToType(ctx.returnType().typeAnnotation().getText())
+            : VoidType.getInstance();
+    
+        const funcType = new FunctionType(paramTypes, returnType);
         this.defineVarType(name, funcType);
     
         this.typeEnv.push(new Map());
@@ -77,21 +103,25 @@ class TypeCheckerVisitor extends AbstractParseTreeVisitor<Type> implements Simpl
         }
     
         const statements = ctx.block().statementList().statement();
-        let returnType: Type = VoidType.getInstance();
+        let inferredReturnType: Type = VoidType.getInstance();
     
         for (let i = 0; i < statements.length; i++) {
             const stmt = statements[i];
             if (stmt.returnStatement()) {
-                returnType = this.visitReturnStatement(stmt.returnStatement());
+                inferredReturnType = this.visitReturnStatement(stmt.returnStatement());
             } else if (i === statements.length - 1 && stmt.expression()) {
-                returnType = this.visit(stmt.expression());
+                inferredReturnType = this.visit(stmt.expression());
             } else {
                 this.visit(stmt);
             }
         }
     
         this.typeEnv.pop();
-        funcType.returnType = returnType;
+    
+        if (!inferredReturnType.compare(returnType)) {
+            throw new Error(`Function ${name} return type mismatch: expected ${returnType}, got ${inferredReturnType}`);
+        }
+    
         return VoidType.getInstance();
     }
     

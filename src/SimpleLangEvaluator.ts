@@ -204,18 +204,21 @@ class SimpleLangEvaluatorVisitor extends AbstractParseTreeVisitor<void> implemen
 
     visitFunctionDeclaration(ctx: FunctionDeclarationContext): void {
         const name = ctx.IDENTIFIER().getText();
-        const params = ctx.parameterList()?.IDENTIFIER().map(id => id.getText()) || [];
+        const paramCtxs = ctx.typedParameterList()?.typedParameter() || [];
+        const paramNames = paramCtxs.map(p => p.IDENTIFIER().getText());
+        const arity = paramNames.length;
         const body = ctx.block();
     
         this.compileEnv[this.compileEnv.length - 1].push(name);
         this.mutabilityMap.set(name, false);
     
         const startPC = this.wc + 2;
-        this.emit({ tag: 'LDF', arity: params.length, addr: startPC });
+        this.emit({ tag: 'LDF', arity, addr: startPC });
     
         const gotoIndex = this.wc++;
         this.instructions[gotoIndex] = { tag: 'GOTO', addr: -1 };
-        this.extend_compile_env(params);
+    
+        this.extend_compile_env(paramNames);
         this.visit(body);
         this.compileEnv.pop();
         this.emit({ tag: 'RESET' });
