@@ -68,7 +68,6 @@ export class SimpleLangEvaluator extends BasicEvaluator {
 
         while (pc < this.instrs.length) {
             const instr = this.instrs[pc];
-            this.conductor.sendOutput(`${instr.tag}`)
 
             switch (instr.tag) {
                 case 'LDC':
