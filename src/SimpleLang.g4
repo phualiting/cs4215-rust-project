@@ -48,6 +48,7 @@ continueStatement
 
 functionDeclaration
     : 'fn' IDENTIFIER '(' typedParameterList? ')' returnType? block
+    | 'fn' '(' typedParameterList? ')' returnType? block
     ;
 
 typedParameterList
@@ -62,6 +63,7 @@ typeAnnotation
     : 'f64'
     | 'bool'
     | 'void'
+    | IDENTIFIER { throw new Error("Invalid type specified: " + $IDENTIFIER.text); }
     ;
 
 functionCall

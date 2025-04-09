@@ -71,23 +71,22 @@ class TypeCheckerVisitor extends AbstractParseTreeVisitor<Type> implements Simpl
         const name = ident.getText();
         
         const paramList = ctx.typedParameterList();
-        if (!paramList) {
-            throw new Error(`Function ${name} has an invalid parameter list`);
-        }
-        const paramCtxs = paramList.typedParameter();
         const paramNames: string[] = [];
         const paramTypes: Type[] = [];
+        if (paramList) {
+            const paramCtxs = paramList.typedParameter();
 
-        for (const p of paramCtxs) {
-            const ident = p.IDENTIFIER?.();
-            const typeAnn = p.typeAnnotation?.();
-        
-            if (!ident || !typeAnn) {
-                throw new Error(`Missing parameter name or type annotation in function '${name}'`);
+            for (const p of paramCtxs) {
+                const ident = p.IDENTIFIER?.();
+                const typeAnn = p.typeAnnotation?.();
+            
+                if (!ident || !typeAnn) {
+                    throw new Error(`Missing parameter name or type annotation in function '${name}'`);
+                }
+            
+                paramNames.push(ident.getText());
+                paramTypes.push(stringToType(typeAnn.getText()));
             }
-        
-            paramNames.push(ident.getText());
-            paramTypes.push(stringToType(typeAnn.getText()));
         }
     
         const returnType = ctx.returnType()

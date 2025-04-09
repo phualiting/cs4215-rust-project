@@ -52,7 +52,7 @@ export class SimpleLangEvaluator extends BasicEvaluator {
             const result = this.run()
             
             // Send the result to the REPL
-            this.conductor.sendOutput(`Result of expression: ${result}`);
+            this.conductor.sendOutput(`${result}`);
         }  catch (error) {
             // Handle errors and send them to the REPL
             if (error instanceof Error) {
@@ -136,7 +136,7 @@ export class SimpleLangEvaluator extends BasicEvaluator {
                     const unop = instr as { tag: 'UNOP'; op: '-' | '!'};
                     switch (unop.op) {
                         case '-': this.OS.push(this.heap.valueToAddress(-v)); break;
-                        case '!': this.OS.push(this.heap.valueToAddress(v === 0 ? 1 : 0)); break;
+                        case '!': this.OS.push(this.heap.valueToAddress(v === false ? true : false)); break;
                         default: throw new Error(`Unknown unary operator: ${unop.op}`);
                     }
                     pc++;
