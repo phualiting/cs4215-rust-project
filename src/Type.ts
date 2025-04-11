@@ -94,11 +94,11 @@ export const VOID_TYPE = VoidType.getInstance();
 
 export function stringToType(str: string): Type {
     switch (str) {
-        case "f64":
+        case "i64":
             return NUMBER_TYPE;
         case "bool":
             return BOOLEAN_TYPE;
-        case "string":
+        case "String":
             return STRING_TYPE;
         case "void":
             return VOID_TYPE;

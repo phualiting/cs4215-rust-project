@@ -90,8 +90,8 @@ export class SimpleLangParser extends antlr.Parser {
 
     public static readonly literalNames = [
         null, "';'", "'{'", "'}'", "'if'", "'else'", "'while'", "'loop'", 
-        "'break'", "'continue'", "'fn'", "'('", "')'", "','", "':'", "'f64'", 
-        "'bool'", "'void'", "'string'", "'return'", "'->'", "'let'", "'='", 
+        "'break'", "'continue'", "'fn'", "'('", "')'", "','", "':'", "'i64'", 
+        "'bool'", "'void'", "'String'", "'return'", "'->'", "'let'", "'='", 
         "'mut'", "'||'", "'&&'", "'=='", "'!='", "'<'", "'<='", "'>'", "'>='", 
         "'+'", "'-'", "'*'", "'/'", "'%'", "'!'", "'&'"
     ];

@@ -60,10 +60,10 @@ typedParameter
     ;
 
 typeAnnotation
-    : 'f64'
+    : 'i64'
     | 'bool'
     | 'void'
-    | 'string'
+    | 'String'
     | IDENTIFIER { throw new Error("Invalid type specified: " + $IDENTIFIER.text); }
     ;
 
