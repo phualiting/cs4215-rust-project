@@ -120,12 +120,36 @@ export class Heap {
         return addr;
     }
 
+    public allocateString(str: string): number {
+        const length = str.length;
+        const size = 1 + Math.ceil((length + 1) / WORD_SIZE);
+        const addr = this.allocate(Tag.String, size);
+    
+        for (let i = 0; i < length; i++) {
+            this.heap.setUint8(addr * WORD_SIZE + i + 1, str.charCodeAt(i));
+        }
+    
+        this.heap.setUint8(addr * WORD_SIZE + length + 1, 0);
+        return addr;
+    }
+
     public addressToValue(val: number): any {
         const tag = this.getTag(val);
         switch (tag) {
             case Tag.True: return true;
             case Tag.False: return false;
             case Tag.Number: return this.getWord(val + 1);
+            case Tag.String: {
+                let result = '';
+                let i = 1;
+                while (true) {
+                    const byte = this.heap.getUint8(val * WORD_SIZE + i);
+                    if (byte === 0) break;
+                    result += String.fromCharCode(byte);
+                    i++;
+                }
+                return result;
+            }
             case Tag.Unassigned: return "<unasssigned>";
             default: return `<${Tag[tag]}>`;
         }
@@ -134,6 +158,7 @@ export class Heap {
     public valueToAddress(val: any): number {
         if (typeof val === 'boolean') return val ? this.True : this.False;
         if (typeof val === 'number') return this.allocateNumber(val);
+        if (typeof val === 'string') return this.allocateString(val);
         if (val === undefined) return this.Unassigned;
         if (val === "<unassigned>") return this.Unassigned;
         throw new Error(`Unsupported value: ${val}`);

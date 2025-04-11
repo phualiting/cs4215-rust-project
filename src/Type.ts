@@ -27,6 +27,18 @@ export class BooleanType extends Type {
     compare(other: Type): boolean { return other instanceof BooleanType; }
 }
 
+export class StringType extends Type {
+    private static instance: StringType | null = null;
+    private constructor() { super(); }
+
+    static getInstance(): StringType {
+        return this.instance ?? (this.instance = new StringType());
+    }
+
+    toString(): string { return "string"; }
+    compare(other: Type): boolean { return other instanceof StringType; }
+}
+
 export class ReferenceType extends Type {
     constructor(public readonly inner: Type) {
         super();
@@ -77,6 +89,7 @@ export class VoidType extends Type {
 
 export const NUMBER_TYPE = NumberType.getInstance();
 export const BOOLEAN_TYPE = BooleanType.getInstance();
+export const STRING_TYPE = StringType.getInstance();
 export const VOID_TYPE = VoidType.getInstance();
 
 export function stringToType(str: string): Type {
@@ -85,6 +98,8 @@ export function stringToType(str: string): Type {
             return NUMBER_TYPE;
         case "bool":
             return BOOLEAN_TYPE;
+        case "string":
+            return STRING_TYPE;
         case "void":
             return VOID_TYPE;
         default:

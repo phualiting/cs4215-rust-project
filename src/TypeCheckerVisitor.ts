@@ -1,7 +1,7 @@
 import { AbstractParseTreeVisitor } from 'antlr4ng';
 import { SimpleLangVisitor } from './parser/src/SimpleLangVisitor';
 import { AdditiveExprContext, AssignmentContext, BlockContext, BorrowExpressionContext, DerefExpressionContext, EqualityExprContext, ExpressionContext, FunctionCallContext, FunctionDeclarationContext, IfStatementContext, LetDeclarationContext, LiteralContext, LogicalAndExprContext, LogicalOrExprContext, MultiplicativeExprContext, PrimaryExprContext, RelationalExprContext, ReturnStatementContext, StatementListContext, UnaryExprContext, WhileLoopContext } from './parser/src/SimpleLangParser';
-import { Type, NumberType, BooleanType, ReferenceType, VoidType, FunctionType, stringToType } from './Type';
+import { Type, NumberType, BooleanType, ReferenceType, VoidType, FunctionType, stringToType, StringType } from './Type';
 
 
 class TypeCheckerVisitor extends AbstractParseTreeVisitor<Type> implements SimpleLangVisitor<Type> {
@@ -219,17 +219,36 @@ class TypeCheckerVisitor extends AbstractParseTreeVisitor<Type> implements Simpl
     }
 
     visitAdditiveExpr(ctx: AdditiveExprContext): Type {
-        const leftType = this.visit(ctx.multiplicativeExpr(0));
-        if (ctx.multiplicativeExpr().length === 1) {
-            return leftType;
-        }
+        let leftType = this.visit(ctx.multiplicativeExpr(0));
+    
         for (let i = 1; i < ctx.multiplicativeExpr().length; i++) {
             const rightType = this.visit(ctx.multiplicativeExpr(i));
-            if (!leftType.compare(NumberType.getInstance()) || !rightType.compare(NumberType.getInstance())) {
-                throw new Error("Additive operator '+' or '-' expects operands of type 'number'");
+            const op = ctx.getChild(2 * i - 1).getText();
+    
+            if (op === '+') {
+                if (
+                    leftType instanceof NumberType && rightType instanceof NumberType
+                ) {
+                    leftType = NumberType.getInstance();
+                } else if (
+                    leftType instanceof StringType && rightType instanceof StringType
+                ) {
+                    leftType = StringType.getInstance();
+                } else {
+                    throw new Error(`Unsupported operand types for '+': ${leftType} and ${rightType}`);
+                }
+            } else if (op === '-') {
+                if (
+                    leftType instanceof NumberType && rightType instanceof NumberType
+                ) {
+                    leftType = NumberType.getInstance();
+                } else {
+                    throw new Error(`Unsupported operand types for '-': ${leftType} and ${rightType}`);
+                }
             }
         }
-        return NumberType.getInstance();
+    
+        return leftType;
     }
 
     visitMultiplicativeExpr(ctx: MultiplicativeExprContext): Type {
@@ -343,6 +362,8 @@ class TypeCheckerVisitor extends AbstractParseTreeVisitor<Type> implements Simpl
             return NumberType.getInstance();
         } else if (ctx.BOOL()) {
             return BooleanType.getInstance();
+        } else if (ctx.STRING()) {
+            return StringType.getInstance();
         }
         throw new Error(`Unknown literal type`);
     }

@@ -386,6 +386,9 @@ class CompilerVisitor extends AbstractParseTreeVisitor<void> implements SimpleLa
         } else if (ctx.BOOL()) {
             const val = ctx.BOOL().getText() === 'true';
             this.emit({ tag: 'LDC', val });
+        } else if (ctx.STRING()) {
+            const str = ctx.STRING().getText().slice(1, -1);
+            this.emit({ tag: 'LDC', val: str });
         }
     }
 }

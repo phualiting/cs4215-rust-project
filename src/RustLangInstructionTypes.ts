@@ -1,5 +1,5 @@
 export type Instruction =
-    | { tag: 'LDC'; val: number | boolean }
+    | { tag: 'LDC'; val: number | boolean | string }
     | { tag: 'BINOP'; op: '+' | '-' | '*' | '/' | '%' | '==' | '!=' | '<' | '<=' | '>' | '>=' | '&&' | '||' }
     | { tag: 'UNOP'; op: '-' | '!' }
     | { tag: 'ASSIGN'; pos: [number, number] }

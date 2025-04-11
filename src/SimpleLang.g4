@@ -63,6 +63,7 @@ typeAnnotation
     : 'f64'
     | 'bool'
     | 'void'
+    | 'string'
     | IDENTIFIER { throw new Error("Invalid type specified: " + $IDENTIFIER.text); }
     ;
 
@@ -151,9 +152,11 @@ primaryExpr
 literal
     : INT
     | BOOL
+    | STRING
     ;
 
 INT: [0-9]+;
 BOOL: 'true' | 'false';
+STRING: '"' (~["\\] | '\\' .)* '"';
 IDENTIFIER: [a-zA-Z_][a-zA-Z0-9_]*;
 WS: [ \t\r\n]+ -> skip;

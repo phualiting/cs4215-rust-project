@@ -86,7 +86,7 @@ export class SimpleLangEvaluator extends BasicEvaluator {
                         throw new Error('Stack underflow');
                     }
                 
-                    let result: number | boolean;
+                    let result: number | boolean | string;
 
                     // Handle equality operators for any types
                     if (binop.op === '==' || binop.op === '!=') {
@@ -117,6 +117,14 @@ export class SimpleLangEvaluator extends BasicEvaluator {
                             case '||': result = a || b; break;
                             default:
                                 throw new Error(`Invalid boolean operator: ${binop.op}`);
+                        }
+                    }
+
+                    else if (typeof a === 'string' && typeof b === 'string') {
+                        if (binop.op === '+') {
+                            result = a + b;
+                        } else {
+                            throw new Error(`Unsupported string operator '${binop.op}'`);
                         }
                     }
                 
