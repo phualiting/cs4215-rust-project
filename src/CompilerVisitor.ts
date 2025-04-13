@@ -7,7 +7,6 @@ class CompilerVisitor extends AbstractParseTreeVisitor<void> implements SimpleLa
     private instructions: Instruction[];
     private wc: number;
     private compileEnv: string[][] = [[]];
-    private mutabilityMap: Map<string, boolean> = new Map();
     private loopStack: { breakPatch: number[], continueAddr: number }[] = [];
 
     constructor() {
@@ -203,7 +202,6 @@ class CompilerVisitor extends AbstractParseTreeVisitor<void> implements SimpleLa
         const body = ctx.block();
     
         this.compileEnv[this.compileEnv.length - 1].push(name);
-        this.mutabilityMap.set(name, false);
     
         const startPC = this.wc + 2;
         this.emit({ tag: 'LDF', arity, addr: startPC });
@@ -243,9 +241,7 @@ class CompilerVisitor extends AbstractParseTreeVisitor<void> implements SimpleLa
     
     visitLetDeclaration(ctx: LetDeclarationContext): void {
         const name = ctx.IDENTIFIER().getText();
-        const isMutable = ctx.mutability() !== null;
         this.compileEnv[this.compileEnv.length - 1].push(name);
-        this.mutabilityMap.set(name, isMutable);
 
         this.visit(ctx.expression());
         this.emit({ tag: 'ASSIGN', pos: this.compile_time_environment_position(this.compileEnv, name) });
@@ -254,9 +250,6 @@ class CompilerVisitor extends AbstractParseTreeVisitor<void> implements SimpleLa
     visitAssignment(ctx: AssignmentContext): void {
         if (ctx.IDENTIFIER()) {
             const name = ctx.IDENTIFIER().getText();
-            if (!this.mutabilityMap.get(name)) {
-                throw new Error(`Cannot assign to immutable variable '${name}'`);
-            }
             this.visit(ctx.expression());
             this.emit({ tag: 'ASSIGN', pos: this.compile_time_environment_position(this.compileEnv, name) });
         } else if (ctx.derefExpression()) {

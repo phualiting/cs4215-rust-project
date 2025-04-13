@@ -4,15 +4,7 @@ import { LetDeclarationContext, AssignmentContext, BorrowExpressionContext } fro
 import { NumberType, Type } from './Type';
 
 class OwnershipVisitor extends AbstractParseTreeVisitor<void> implements SimpleLangVisitor<void> {
-    private varStateMap: Map<string, { mutable: boolean, moved: boolean, borrowKind: string, immBorrowCount: number }> = new Map();
-
-    getVarType(varName: string): Type {
-        const varState = this.getVarState(varName);
-        if (varState) {
-            return NumberType.getInstance();
-        }
-        throw new Error(`Variable ${varName} not declared.`);
-    }
+    private varStateMap: Map<string, { mutable: boolean, borrowKind: string, owner: string }> = new Map();
 
     getVarState(varName: string) {
         return this.varStateMap.get(varName);
@@ -27,20 +19,19 @@ class OwnershipVisitor extends AbstractParseTreeVisitor<void> implements SimpleL
         const isMutable = ctx.mutability() !== null;
     
         const expr = ctx.expression();
-        let borrowKind: 'none' | 'mut' | 'imm' = 'none';
+        let owner = 'none';
     
+
         if (expr.borrowExpression()) {
-            const isMut = expr.borrowExpression()._mutKeyword !== undefined;
-            borrowKind = isMut ? 'mut' : 'imm';
+            owner = expr.borrowExpression()._target.text
         }
     
         this.visit(expr);
     
         this.varStateMap.set(varName, {
             mutable: isMutable,
-            moved: false,
-            borrowKind,
-            immBorrowCount: borrowKind === 'imm' ? 1 : 0
+            borrowKind: 'none',
+            owner
         });
     }
 
@@ -50,7 +41,7 @@ class OwnershipVisitor extends AbstractParseTreeVisitor<void> implements SimpleL
             const varState = this.getVarState(varName);
 
             if (!varState) {
-                throw new Error(`Variable ${varName} not declared.`);
+                throw new Error(`Variable ${varName} not declared`);
             }
 
             if (!varState.mutable) {
@@ -58,7 +49,7 @@ class OwnershipVisitor extends AbstractParseTreeVisitor<void> implements SimpleL
             }
 
             if (varState.borrowKind !== 'none') {
-                throw new Error(`Cannot assign to ${varName} as it is currently borrowed.`);
+                throw new Error(`Cannot assign to ${varName} as it is currently borrowed`);
             }
 
             this.visit(ctx.expression());
@@ -67,13 +58,14 @@ class OwnershipVisitor extends AbstractParseTreeVisitor<void> implements SimpleL
             const varState = this.getVarState(varName);
     
             if (!varState) {
-                throw new Error(`Variable ${varName} not declared.`);
+                throw new Error(`Variable ${varName} not declared`);
             }
-    
-            if (varState.borrowKind !== 'mut') {
-                throw new Error(`Cannot assign through ${varName} because it is not a mutable reference.`);
+
+            const owner = varState.owner;
+            const ownerVarState = this.getVarState(owner);
+            if (ownerVarState.borrowKind !== 'mut') {
+                throw new Error(`Cannot assign through ${varName} because it is not a mutable reference`);
             }
-    
             this.visit(ctx.expression());
         }
     }
@@ -83,23 +75,25 @@ class OwnershipVisitor extends AbstractParseTreeVisitor<void> implements SimpleL
         const varState = this.getVarState(varName);
 
         if (!varState) {
-            throw new Error(`Variable ${varName} not declared.`);
+            throw new Error(`Variable ${varName} not declared`);
         }
 
         const isMutableBorrow = ctx._mutKeyword !== undefined;
 
         if (isMutableBorrow && varState.borrowKind !== 'none') {
-            throw new Error(`Cannot borrow ${varName} mutably because it is already borrowed.`);
+            throw new Error(`Cannot borrow ${varName} mutably because it is already borrowed`);
         }
 
         if (isMutableBorrow) {
+            if (!varState.mutable) {
+                throw new Error(`Cannot borrow ${varName} mutably because ${varName} is not declared as mutable`);
+            }
             varState.borrowKind = 'mut';
         } else {
             if (varState.borrowKind === 'mut') {
-                throw new Error(`Cannot borrow ${varName} immutably because it is mutably borrowed.`);
+                throw new Error(`Cannot borrow ${varName} immutably because it is mutably borrowed`);
             }
             varState.borrowKind = 'imm';
-            varState.immBorrowCount++;
         }
     }
 }
