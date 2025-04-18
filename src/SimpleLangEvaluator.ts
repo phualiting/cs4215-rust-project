@@ -49,11 +49,8 @@ export class SimpleLangEvaluator extends BasicEvaluator {
             const compiler = new CompilerVisitor();
             compiler.visit(tree);
             this.instrs = compiler.getInstructions();
-            // const result = this.run()
             this.run();
             
-            // Send the result to the REPL
-            // this.conductor.sendOutput(`${result}`);
         }  catch (error) {
             // Handle errors and send them to the REPL
             if (error instanceof Error) {
@@ -311,7 +308,6 @@ export class SimpleLangEvaluator extends BasicEvaluator {
                     });
                 
                     this.conductor.sendOutput(result);
-                    // this.OS.push(this.heap.valueToAddress(undefined));
                     pc++;
                     break;
                 }

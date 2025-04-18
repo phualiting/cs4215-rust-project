@@ -214,6 +214,7 @@ class CompilerVisitor extends AbstractParseTreeVisitor<void> implements SimpleLa
         this.extend_compile_env(paramNames);
         this.visit(body);
         this.compileEnv.pop();
+        this.emit({tag: 'LDC', val: undefined});
         this.emit({ tag: 'RESET' });
         this.instructions[gotoIndex].addr = this.wc;
         this.emit({
