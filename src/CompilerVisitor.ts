@@ -1,6 +1,6 @@
 import { AbstractParseTreeVisitor } from "antlr4ng";
 import { Instruction } from "./RustLangInstructionTypes";
-import { AdditiveExprContext, AssignmentContext, BlockContext, BorrowExpressionContext, DerefExpressionContext, EqualityExprContext, ExpressionContext, FunctionCallContext, FunctionDeclarationContext, IfStatementContext, LetDeclarationContext, LiteralContext, LogicalAndExprContext, LogicalOrExprContext, LoopStatementContext, MultiplicativeExprContext, PrimaryExprContext, ProgContext, RelationalExprContext, ReturnStatementContext, StatementContext, StatementListContext, UnaryExprContext, WhileLoopContext } from "./parser/src/SimpleLangParser";
+import { AdditiveExprContext, AssignmentContext, BlockContext, BorrowExpressionContext, DerefExpressionContext, EqualityExprContext, ExpressionContext, FunctionCallContext, FunctionDeclarationContext, IfStatementContext, LetDeclarationContext, LiteralContext, LogicalAndExprContext, LogicalOrExprContext, LoopStatementContext, MultiplicativeExprContext, PrimaryExprContext, PrintlnStatementContext, ProgContext, RelationalExprContext, ReturnStatementContext, StatementContext, StatementListContext, UnaryExprContext, WhileLoopContext } from "./parser/src/SimpleLangParser";
 import { SimpleLangVisitor } from "./parser/src/SimpleLangVisitor";
 
 class CompilerVisitor extends AbstractParseTreeVisitor<void> implements SimpleLangVisitor<void> {
@@ -102,6 +102,8 @@ class CompilerVisitor extends AbstractParseTreeVisitor<void> implements SimpleLa
             this.visitFunctionDeclaration(ctx.functionDeclaration());
         } else if (ctx.returnStatement()) {
             this.visitReturnStatement(ctx.returnStatement());
+        } else if (ctx.printlnStatement()) {
+            this.visitPrintlnStatement(ctx.printlnStatement());
         }
     }
 
@@ -239,6 +241,18 @@ class CompilerVisitor extends AbstractParseTreeVisitor<void> implements SimpleLa
         this.emit({ tag: 'RESET' });
     }
     
+    visitPrintlnStatement(ctx: PrintlnStatementContext): void {
+        const formatString = ctx.STRING().getText().slice(1, -1);
+        this.emit({ tag: 'LDC', val: formatString });
+
+        const args = ctx.expression();
+        for (const arg of args) {
+            this.visit(arg);
+        }
+
+        this.emit({ tag: 'PRINTLN', arity: args.length });
+    }
+
     visitLetDeclaration(ctx: LetDeclarationContext): void {
         const name = ctx.IDENTIFIER().getText();
         this.compileEnv[this.compileEnv.length - 1].push(name);

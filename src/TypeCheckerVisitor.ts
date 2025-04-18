@@ -1,6 +1,6 @@
 import { AbstractParseTreeVisitor } from 'antlr4ng';
 import { SimpleLangVisitor } from './parser/src/SimpleLangVisitor';
-import { AdditiveExprContext, AssignmentContext, BlockContext, BorrowExpressionContext, DerefExpressionContext, EqualityExprContext, ExpressionContext, FunctionCallContext, FunctionDeclarationContext, IfStatementContext, LetDeclarationContext, LiteralContext, LogicalAndExprContext, LogicalOrExprContext, LoopStatementContext, MultiplicativeExprContext, PrimaryExprContext, RelationalExprContext, ReturnStatementContext, StatementContext, StatementListContext, UnaryExprContext, WhileLoopContext } from './parser/src/SimpleLangParser';
+import { AdditiveExprContext, AssignmentContext, BlockContext, BorrowExpressionContext, DerefExpressionContext, EqualityExprContext, ExpressionContext, FunctionCallContext, FunctionDeclarationContext, IfStatementContext, LetDeclarationContext, LiteralContext, LogicalAndExprContext, LogicalOrExprContext, LoopStatementContext, MultiplicativeExprContext, PrimaryExprContext, PrintlnStatementContext, RelationalExprContext, ReturnStatementContext, StatementContext, StatementListContext, UnaryExprContext, WhileLoopContext } from './parser/src/SimpleLangParser';
 import { Type, NumberType, BooleanType, ReferenceType, VoidType, FunctionType, stringToType, StringType } from './Type';
 
 class TypeCheckerVisitor extends AbstractParseTreeVisitor<Type> implements SimpleLangVisitor<Type> {
@@ -63,6 +63,8 @@ class TypeCheckerVisitor extends AbstractParseTreeVisitor<Type> implements Simpl
             return this.visitLoopStatement(ctx.loopStatement());
         } else if (ctx.returnStatement()) {
             return this.visitReturnStatement(ctx.returnStatement());
+        } else if (ctx.printlnStatement()) {
+            return this.visitPrintlnStatement(ctx.printlnStatement());
         } else if (ctx.breakStatement() || ctx.continueStatement()) {
             return VoidType.getInstance();
         } else if (ctx.functionDeclaration()) {
@@ -187,6 +189,16 @@ class TypeCheckerVisitor extends AbstractParseTreeVisitor<Type> implements Simpl
         if (ctx.expression()) {
             return this.visit(ctx.expression());
         }
+        return VoidType.getInstance();
+    }
+
+    visitPrintlnStatement(ctx: PrintlnStatementContext): Type {
+        const expressions = ctx.expression();
+    
+        for (let i = 0; i < expressions.length; ++i) {
+            this.visit(expressions[i]);
+        }
+    
         return VoidType.getInstance();
     }
     

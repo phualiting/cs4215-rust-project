@@ -49,10 +49,11 @@ export class SimpleLangEvaluator extends BasicEvaluator {
             const compiler = new CompilerVisitor();
             compiler.visit(tree);
             this.instrs = compiler.getInstructions();
-            const result = this.run()
+            // const result = this.run()
+            this.run();
             
             // Send the result to the REPL
-            this.conductor.sendOutput(`${result}`);
+            // this.conductor.sendOutput(`${result}`);
         }  catch (error) {
             // Handle errors and send them to the REPL
             if (error instanceof Error) {
@@ -285,6 +286,32 @@ export class SimpleLangEvaluator extends BasicEvaluator {
                     this.heap.setWord(targetAddr, value);
                 
                     this.OS.push(value);
+                    pc++;
+                    break;
+                }
+
+                case 'PRINTLN': {
+                    const args = [];
+                    for (let i = 0; i < instr.arity; i++) {
+                        const valAddr = this.OS.pop();
+                        args.unshift(this.heap.addressToValue(valAddr)); 
+                    }
+                
+                    const fmtAddr = this.OS.pop();
+                    const format = this.heap.addressToValue(fmtAddr);
+                
+                    if (typeof format !== 'string') {
+                        throw new Error("println! expects a string format as the first argument");
+                    }
+                
+                    let argIndex = 0;
+                    const result = format.replace(/{}+/g, () => {
+                        if (argIndex >= args.length) return "{}";
+                        return String(args[argIndex++]);
+                    });
+                
+                    this.conductor.sendOutput(result);
+                    // this.OS.push(this.heap.valueToAddress(undefined));
                     pc++;
                     break;
                 }

@@ -20,6 +20,7 @@ statement
     | continueStatement ';'
     | functionDeclaration
     | returnStatement
+    | printlnStatement ';'
     ;
 
 block
@@ -81,6 +82,10 @@ returnStatement
 
 returnType
     : '->' typeAnnotation
+    ;
+
+printlnStatement
+    : 'println!' '(' STRING (',' expression)* ')'
     ;
 
 letDeclaration

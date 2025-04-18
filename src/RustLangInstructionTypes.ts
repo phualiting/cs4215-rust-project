@@ -16,4 +16,5 @@ export type Instruction =
     | { tag: 'BORROW'; pos: [number, number]; mut: boolean }
     | { tag: 'DEREF'}
     | { tag: 'DEREF_ASSIGN' }
+    | { tag: 'PRINTLN'; arity: number }
     | { tag: 'DONE' };

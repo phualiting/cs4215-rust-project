@@ -20,6 +20,7 @@ import { FunctionCallContext } from "./SimpleLangParser.js";
 import { ArgumentListContext } from "./SimpleLangParser.js";
 import { ReturnStatementContext } from "./SimpleLangParser.js";
 import { ReturnTypeContext } from "./SimpleLangParser.js";
+import { PrintlnStatementContext } from "./SimpleLangParser.js";
 import { LetDeclarationContext } from "./SimpleLangParser.js";
 import { MutabilityContext } from "./SimpleLangParser.js";
 import { AssignmentContext } from "./SimpleLangParser.js";
@@ -212,6 +213,16 @@ export class SimpleLangListener implements ParseTreeListener {
      * @param ctx the parse tree
      */
     exitReturnType?: (ctx: ReturnTypeContext) => void;
+    /**
+     * Enter a parse tree produced by `SimpleLangParser.printlnStatement`.
+     * @param ctx the parse tree
+     */
+    enterPrintlnStatement?: (ctx: PrintlnStatementContext) => void;
+    /**
+     * Exit a parse tree produced by `SimpleLangParser.printlnStatement`.
+     * @param ctx the parse tree
+     */
+    exitPrintlnStatement?: (ctx: PrintlnStatementContext) => void;
     /**
      * Enter a parse tree produced by `SimpleLangParser.letDeclaration`.
      * @param ctx the parse tree
