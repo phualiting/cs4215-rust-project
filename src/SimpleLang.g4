@@ -157,7 +157,7 @@ primaryExpr
 literal
     : INT
     | BOOL
-    | STRING
+    | 'String''::''from''(' STRING ')'
     ;
 
 INT: [0-9]+;
