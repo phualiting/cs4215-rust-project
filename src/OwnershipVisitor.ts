@@ -1,7 +1,6 @@
 import { AbstractParseTreeVisitor } from 'antlr4ng';
 import { SimpleLangVisitor } from './parser/src/SimpleLangVisitor';
 import { LetDeclarationContext, AssignmentContext, BorrowExpressionContext } from './parser/src/SimpleLangParser';
-import { NumberType, Type } from './Type';
 
 class OwnershipVisitor extends AbstractParseTreeVisitor<void> implements SimpleLangVisitor<void> {
     private varStateMap: Map<string, { mutable: boolean, borrowKind: string, owner: string }> = new Map();
