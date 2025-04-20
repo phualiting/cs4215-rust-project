@@ -50,13 +50,7 @@ class CompilerVisitor extends AbstractParseTreeVisitor<void> implements SimpleLa
         for (const stmt of ctx.statement()) {
             if (stmt.letDeclaration()) {
                 const name = stmt.letDeclaration().IDENTIFIER().getText();
-    
-                try {
-                    this.compile_time_environment_position(this.compileEnv, name);
-                    continue;
-                } catch {
-                    locals.push(name);
-                }
+                locals.push(name);
             }
         }
     
@@ -110,7 +104,7 @@ class CompilerVisitor extends AbstractParseTreeVisitor<void> implements SimpleLa
     visitBlock(ctx: BlockContext): void {
         const locals = this.scanStatementList(ctx.statementList());
         this.emit({ tag: 'ENTER_SCOPE', num: locals.length });
-        this.extend_compile_env(locals);
+        this.compileEnv.push([]);
         this.visit(ctx.statementList());
         this.compileEnv.pop();
         this.emit({ tag: 'EXIT_SCOPE' });
